@@ -113,7 +113,8 @@ export function HeroScene({ period, waiting }: Props) {
 
   const lookingAtYou = reduced || hovering || gaze === "front";
   const showHint = worried && (reduced || (hint && !hovering));
-  const mood: BrownieMood = hovering && baseMood !== "sleeping" ? "happy" : baseMood;
+  // Pointing at the Report button wakes him up: a happy bow, with his paw showing you the button.
+  const mood: BrownieMood = hovering ? "happy" : baseMood;
 
   const onBark = () => {
     setBarked(true);
@@ -191,9 +192,11 @@ export function HeroScene({ period, waiting }: Props) {
 
       <Brownie
         mood={mood}
-        gaze={baseMood === "sleeping" ? undefined : lookingAtYou ? "front" : "side"}
+        gaze={baseMood === "sleeping" && !hovering ? undefined : lookingAtYou ? "front" : "side"}
         gazeDir={1}
-        pawUp={worried && lookingAtYou && !hovering}
+        pawUp={hovering || (worried && lookingAtYou)}
+        pawDir={hovering ? -1 : 1}
+        bow={hovering}
         interactive
         collar
         label={t("home.hero.brownie")}

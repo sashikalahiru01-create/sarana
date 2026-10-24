@@ -24,8 +24,12 @@ type Props = {
   gaze?: "front" | "side";
   /** Side to look at when gaze is "side": 1 = the viewer's right, -1 = the left. */
   gazeDir?: 1 | -1;
-  /** Lift the paw on the gaze side, as if pointing at something. */
+  /** Lift the paw, as if pointing at something. */
   pawUp?: boolean;
+  /** Which way the lifted paw points: 1 = the viewer's right (the default), -1 = the left. */
+  pawDir?: 1 | -1;
+  /** Bow politely, nodding again and again ("please do it"). */
+  bow?: boolean;
   className?: string;
 };
 
@@ -41,13 +45,15 @@ const POSES: Record<BrownieMood, { ear: number; head: number; tail: number }> = 
  * Brownie, the Sarana mascot. A tan street dog built as an SVG rig with fixed joints:
  * the ear joint sits on the head outline, the head pivots at the neck, the tail at its root.
  */
-export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, gaze, gazeDir = 1, pawUp = false, className }: Props) {
+export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, gaze, gazeDir = 1, pawUp = false, pawDir = gazeDir, bow = false, className }: Props) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const rootRef = useRef<SVGSVGElement>(null);
   const moodRef = useRef(mood);
   const applyMoodRef = useRef<((m: BrownieMood, immediate: boolean) => void) | null>(null);
   const onBarkRef = useRef(onBark);
-  const gazeRef = useRef({ gaze, gazeDir, pawUp });
+  const gazeRef = useRef({ gaze, gazeDir, pawUp, pawDir });
+  const bowRef = useRef(bow);
+  const applyBowRef = useRef<((on: boolean) => void) | null>(null);
   const applyGazeRef = useRef<((immediate: boolean) => void) | null>(null);
 
   useEffect(() => {
@@ -63,7 +69,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
     let disposed = false;
 
     const ctx = gsap.context(() => {
-      const pose = { ear: -105, earKick: 0, head: -6, headX: 0, headY: 0, tail: 62, wag: 0, breathe: 1, paw: 0 };
+      const pose = { ear: -105, earKick: 0, head: -6, headX: 0, headY: 0, tail: 62, wag: 0, breathe: 1, paw: 0, bow: 0 };
       const earEl = part("earL");
       const headEl = part("head");
       const tailEl = part("tail");
@@ -74,7 +80,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         const b = pose.breathe;
         const lift = (b - 1) * 122;
         bodyEl.setAttribute("transform", `translate(0 ${350 * (1 - b)}) scale(1 ${b})`);
-        headEl.setAttribute("transform", `translate(${pose.headX} ${pose.headY - lift}) rotate(${pose.head} 200 240)`);
+        headEl.setAttribute("transform", `translate(${pose.headX} ${pose.headY + pose.bow * 24 - lift}) rotate(${pose.head + pose.bow * 5} 200 240)`);
         pawEl.setAttribute("transform", `rotate(${pose.paw} 235 302)`);
         earEl.setAttribute("transform", `rotate(${pose.ear + pose.earKick} 152 112)`);
         tailEl.setAttribute("transform", `translate(0 ${-(b - 1) * 50}) rotate(${pose.tail + pose.wag} 282 300)`);
@@ -145,7 +151,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
 
       // Gaze: turn the head and eyes toward the side, or face the viewer. Runs after the mood so it wins.
       applyGazeRef.current = (immediate) => {
-        const { gaze: g, gazeDir: dir, pawUp: up } = gazeRef.current;
+        const { gaze: g, gazeDir: dir, pawUp: up, pawDir: pdir } = gazeRef.current;
         const base = POSES[moodRef.current];
         const d = immediate ? 0 : 0.6;
         if (g) {
@@ -160,10 +166,23 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
           });
           lookAt(side ? 7 * dir : 0, side ? -1 : 1, immediate);
         }
-        gsap.to(pose, { paw: up ? -54 * dir : 0, duration: d * 0.9, ease: up ? "back.out(2.2)" : "power2.out", overwrite: "auto" });
+        gsap.to(pose, { paw: up ? -54 * pdir : 0, duration: d * 0.9, ease: up ? "back.out(2.2)" : "power2.out", overwrite: "auto" });
+      };
+      let bowTween: gsap.core.Tween | null = null;
+      applyBowRef.current = (on) => {
+        bowTween?.kill();
+        bowTween = null;
+        if (!on) {
+          gsap.to(pose, { bow: 0, duration: 0.4, ease: "power2.out" });
+        } else if (reduce) {
+          gsap.to(pose, { bow: 1, duration: 0 });
+        } else {
+          bowTween = gsap.fromTo(pose, { bow: 0.15 }, { bow: 1, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: -1 });
+        }
       };
       applyMoodRef.current(moodRef.current, true);
       applyGazeRef.current(true);
+      applyBowRef.current(bowRef.current);
 
       if (!interactive) return;
 
@@ -232,6 +251,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
       disposed = true;
       applyMoodRef.current = null;
       applyGazeRef.current = null;
+      applyBowRef.current = null;
       cleanups.forEach((fn) => fn());
       ctx.revert();
     };
@@ -244,9 +264,14 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
   }, [mood]);
 
   useEffect(() => {
-    gazeRef.current = { gaze, gazeDir, pawUp };
+    gazeRef.current = { gaze, gazeDir, pawUp, pawDir };
     applyGazeRef.current?.(false);
-  }, [gaze, gazeDir, pawUp]);
+  }, [gaze, gazeDir, pawUp, pawDir]);
+
+  useEffect(() => {
+    bowRef.current = bow;
+    applyBowRef.current?.(bow);
+  }, [bow]);
 
   const id = (name: string) => `${uid}${name}`;
   const ref = (name: string) => `url(#${id(name)})`;

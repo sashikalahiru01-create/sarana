@@ -220,6 +220,53 @@ h3 {
     opacity: 0.1;
   }
 }
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em) rotate(4deg);
+    filter: blur(6px);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ring-pulse {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.14);
+    opacity: 0;
+  }
+}
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(24px, -30px, 0) scale(1.08);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
 @keyframes rise-in {
   from {
     opacity: 0;
