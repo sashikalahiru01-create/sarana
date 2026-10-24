@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, HandHeart, Loader2, Send } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PawConfetti } from "@/components/ui/PawConfetti";
@@ -162,6 +162,22 @@ export function ReportForm() {
           {t("report.success.title")}
         </h2>
         <p className="text-muted">{t("report.success.body")}</p>
+        <Link
+          href="/volunteer"
+          className="flex w-full items-center gap-3 rounded-card bg-linear-to-br from-gold/25 to-coral/10 p-4 text-left transition duration-300 ease-spring hover:-translate-y-0.5 hover:shadow-pop"
+        >
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gold/40 text-[#8a5b00]">
+            <HandHeart size={22} aria-hidden="true" />
+          </span>
+          <span className="min-w-0">
+            <strong className="block font-heading">{t("reportInvite.title")}</strong>
+            <span className="text-sm text-muted">{t("reportInvite.body")}</span>
+            <span className="mt-1 flex items-center gap-1 text-sm font-bold text-coral-ink dark:text-brownie">
+              {t("reportInvite.cta")}
+              <ArrowRight size={15} aria-hidden="true" />
+            </span>
+          </span>
+        </Link>
         <div className="mt-2 flex w-full flex-col gap-3">
           {done.id && (
             <Link href={`/pet/${done.id}`} className="btn btn-primary">

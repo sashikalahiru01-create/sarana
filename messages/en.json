@@ -342,5 +342,94 @@
       "showOnMap": "Show on map",
       "close": "Close"
     }
+  },
+  "volunteer": {
+    "eyebrow": "Become a volunteer",
+    "title": "Join Brownie's pack",
+    "subtitle": "Volunteers are the hands behind every rescue. Tell us how you can help, and we'll let you know when an animal near you needs someone.",
+    "perks": {
+      "free": "Free, always",
+      "near": "Only animals near you",
+      "stop": "Stop any time"
+    },
+    "stepsLabel": "Sign-up steps",
+    "steps": {
+      "skills": "Skills",
+      "area": "Area",
+      "you": "About you"
+    },
+    "skills": {
+      "title": "How can you help?",
+      "hint": "Pick everything you are happy to do.",
+      "feeding": {
+        "title": "Feeding",
+        "body": "Bring food and fresh water"
+      },
+      "transport": {
+        "title": "Transport",
+        "body": "Give an animal a lift"
+      },
+      "foster": {
+        "title": "Foster",
+        "body": "Give a temporary home"
+      },
+      "vet_care": {
+        "title": "Vet care",
+        "body": "Treat or check animals"
+      }
+    },
+    "area": {
+      "title": "Where can you help?",
+      "hint": "We'll tell you about animals around this place.",
+      "label": "Town or area",
+      "placeholder": "e.g. Kandy, near the lake",
+      "pin": "Pin your spot (optional)",
+      "pinHint": "Tap the map or use your location, so we can measure distances.",
+      "useMine": "Use my location",
+      "locating": "Finding you…",
+      "failed": "We couldn't get your location. You can tap the map instead.",
+      "mapLabel": "Map for choosing your area",
+      "placed": "Spot saved",
+      "radius": "How far can you travel?",
+      "radiusValue": "{km} km"
+    },
+    "you": {
+      "title": "About you",
+      "name": "Your name",
+      "phone": "Phone number",
+      "phoneHint": "Only site admins can see this. It is used to reach you when an animal near you needs help.",
+      "summary": "Your pack card"
+    },
+    "nav": {
+      "next": "Next",
+      "back": "Back",
+      "submit": "Join the pack",
+      "sending": "Joining…"
+    },
+    "error": {
+      "needSkill": "Pick at least one way you can help.",
+      "needArea": "Tell us your town or area.",
+      "needName": "Please enter your name.",
+      "needPhone": "Enter a valid phone number, for example 0771234567.",
+      "already": "You are already a volunteer. Thank you!",
+      "save": "We couldn't save your sign-up. Please try again."
+    },
+    "gate": {
+      "title": "One last step: log in",
+      "body": "Your answers are saved on this phone. Log in to finish joining the pack.",
+      "login": "Log in to finish"
+    },
+    "success": {
+      "title": "Welcome to the pack, {name}!",
+      "body": "Your gold collar tag is ready. We'll tell you when an animal near {area} needs help.",
+      "tag": "Pack volunteer",
+      "map": "See animals near you",
+      "home": "Back home"
+    }
+  },
+  "reportInvite": {
+    "title": "Want to do more?",
+    "body": "Join the volunteer pack and help animals near you.",
+    "cta": "Become a volunteer"
   }
 }
