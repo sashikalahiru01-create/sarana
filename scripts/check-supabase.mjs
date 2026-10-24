@@ -14,7 +14,13 @@ if (!url || url.includes("YOUR-PROJECT-REF") || !key || key.includes("xxxxxxxx")
   process.exit(1);
 }
 
-const supabase = createClient(url, key);
+// Node 20 has no built-in WebSocket and the client would throw; we never use Realtime, so pass a stand-in.
+class UnavailableWebSocket {
+  constructor() {
+    throw new Error("Realtime is not available on this Node version");
+  }
+}
+const supabase = createClient(url, key, typeof WebSocket === "undefined" ? { realtime: { transport: UnavailableWebSocket } } : {});
 
 for (const table of ["pets", "reports", "profiles"]) {
   const { error } = await supabase.from(table).select("id", { count: "exact", head: true });
@@ -31,14 +37,11 @@ for (const table of ["volunteers", "pet_contacts"]) {
 const stats = await supabase.rpc("get_public_stats");
 check("get_public_stats() works", !stats.error, stats.error?.message ?? JSON.stringify(stats.data));
 
-const { data: bucket, error: bucketError } = await supabase.storage.getBucket("pet-photos");
-// getBucket needs more rights than a publishable key has on some projects, so fall back to a public URL check.
-if (bucket) {
-  check("bucket pet-photos exists", true, bucket.public ? "public" : "NOT PUBLIC");
-} else {
-  const probe = await fetch(`${url}/storage/v1/object/public/pet-photos/does-not-exist.webp`);
-  check("bucket pet-photos exists", probe.status === 400 || probe.status === 404, `${bucketError?.message ?? ""} (probe ${probe.status})`);
-}
+// A visitor cannot list buckets, so ask for a file that does not exist: a real bucket answers
+// "NoSuchKey" (object not found), a missing bucket answers "NoSuchBucket".
+const probe = await fetch(`${url}/storage/v1/object/public/pet-photos/does-not-exist.webp`);
+const probeBody = await probe.json().catch(() => ({}));
+check("bucket pet-photos exists and is public", probeBody.code === "NoSuchKey", probeBody.code ?? `HTTP ${probe.status}`);
 
 for (const { name, ok, detail } of results) {
   console.log(`${ok ? "✓" : "✗"} ${name}${detail ? "  — " + detail : ""}`);
