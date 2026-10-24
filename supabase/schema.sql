@@ -214,12 +214,12 @@ language sql
 stable
 security definer
 set search_path = ''
-as $
+as $$
   select exists (
     select 1 from public.volunteers
     where user_id = (select auth.uid()) and is_active
   );
-$;
+$$;
 
 -- ---------------------------------------------------------------------------
 -- Public numbers for the home page (counts only, no private data)
