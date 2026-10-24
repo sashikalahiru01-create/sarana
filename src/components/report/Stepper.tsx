@@ -8,7 +8,7 @@ export function Stepper({ steps, current, label }: { steps: string[]; current: n
         const done = i < current;
         const active = i === current;
         return (
-          <li key={name} aria-current={active ? "step" : undefined} className="flex flex-1 items-center gap-2">
+          <li key={name} aria-current={active ? "step" : undefined} className="flex min-w-0 flex-1 items-center gap-2">
             <span
               className={`grid size-8 shrink-0 place-items-center rounded-full text-sm font-bold transition duration-300 ${
                 done ? "bg-green text-white" : active ? "bg-coral text-white" : "bg-line text-muted"

@@ -48,7 +48,8 @@
   --font-body: var(--font-sinhala), var(--font-bricolage), var(--font-tamil), system-ui, sans-serif;
 }
 
-:root:lang(en) {
+:root:lang(en),
+:root:lang(ta) {
   --font-body: var(--font-bricolage), var(--font-sinhala), var(--font-tamil), system-ui, sans-serif;
 }
 
@@ -86,6 +87,12 @@ html {
   background: var(--background);
 }
 
+html,
+body {
+  /* "clip" (unlike "hidden") keeps the sticky header working while stopping decorative things from causing a sideways scroll */
+  overflow-x: clip;
+}
+
 body {
   position: relative;
   isolation: isolate;
@@ -119,6 +126,72 @@ h3 {
 :focus-visible {
   outline: 3px solid var(--color-blue);
   outline-offset: 3px;
+}
+
+/* Tamil letters are taller and join in clusters: no tightened tracking, and a little more line height. */
+:root:lang(ta) h1,
+:root:lang(ta) h2,
+:root:lang(ta) h3 {
+  letter-spacing: 0;
+  line-height: 1.32;
+}
+
+/* Tamil words are long (one word can be 17 letters), so big headings get smaller sizes and may break a word
+   rather than run off the screen. These rules apply to Tamil only. */
+:root:lang(ta) .hero-title {
+  font-size: clamp(26px, calc(3.4vw + 0.6rem), 44px);
+  overflow-wrap: anywhere;
+}
+/* On tablets the Tamil headline needs the full width, so the hero stacks like on a phone. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  :root:lang(ta) .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  :root:lang(ta) .hero-scene-wrap {
+    max-width: 34rem;
+  }
+}
+/* On phones the three floating cards would crowd the picture once their Tamil text is added: keep one, narrower. */
+@media (max-width: 639.98px) {
+  :root:lang(ta) .hero-card {
+    max-width: 10.5rem;
+  }
+  :root:lang(ta) .hero-card[data-step="2"],
+  :root:lang(ta) .hero-card[data-step="3"] {
+    display: none;
+  }
+}
+:root:lang(ta) h2[data-guide] {
+  font-size: clamp(22px, 6.2vw, 40px);
+  overflow-wrap: anywhere;
+}
+/* The header has three language buttons now, and Tamil and Sinhala menu words are wide. Keep the header to what fits;
+   the footer still has every link. English keeps its full menu from 1366 px up. */
+@media (max-width: 1535.98px) {
+  :root:lang(ta) .nav-about,
+  :root:lang(ta) .login-label,
+  :root:lang(si) .nav-about,
+  :root:lang(si) .login-label {
+    display: none;
+  }
+}
+@media (max-width: 1279.98px) {
+  :root .nav-story {
+    display: none;
+  }
+}
+/* On tablets the top menu does not fit next to three language buttons, so the phone's bottom bar stays instead. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  :root .site-nav,
+  :root .header-cta {
+    display: none;
+  }
+  :root .bottom-bar {
+    display: block;
+  }
+  :root .site-footer {
+    padding-bottom: 9rem;
+  }
 }
 
 /* Scroll story (home page). Scene colours are the story, so they do not change in dark mode. */
@@ -446,7 +519,7 @@ details[open] > .faq-body {
 
   /* Buttons: 16px radius, at least 44px tall, 0.2s hover/press. */
   .btn {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-button px-6 text-base font-bold transition duration-200 select-none;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-button px-6 text-center text-base font-bold transition duration-200 select-none;
     @apply hover:-translate-y-0.5 active:scale-[0.97];
     @apply disabled:pointer-events-none disabled:opacity-60;
   }

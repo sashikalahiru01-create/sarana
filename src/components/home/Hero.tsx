@@ -25,8 +25,8 @@ export async function Hero() {
         <div aria-hidden="true" className="absolute -left-24 top-10 -z-10 size-[26rem] animate-[orb-float_14s_ease-in-out_infinite] rounded-full bg-coral/15 blur-3xl" />
         <div aria-hidden="true" className="absolute -right-20 top-40 -z-10 size-[24rem] animate-[orb-float_18s_ease-in-out_-6s_infinite] rounded-full bg-gold/20 blur-3xl" />
 
-        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-8 pt-10 md:grid-cols-[1.05fr_0.95fr] md:gap-14 md:pb-12 md:pt-16">
-          <div className="flex flex-col items-start gap-5">
+        <section className="hero-grid mx-auto grid max-w-6xl items-center gap-12 px-4 pb-8 pt-10 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] md:gap-14 md:pb-12 md:pt-16">
+          <div className="flex min-w-0 flex-col items-start gap-5">
             <p {...fadeUp(0)} className={`glass inline-flex items-center gap-2 rounded-full py-1.5 pl-3 pr-4 text-[13px] font-bold text-coral-ink dark:text-brownie ${fadeUp(0).className}`}>
               <span aria-hidden="true" className="relative grid size-2.5 place-items-center">
                 <span className="absolute size-2.5 animate-ping rounded-full bg-coral/50" />
@@ -38,7 +38,7 @@ export async function Hero() {
             <AnimatedHeadline
               text={t("home.hero.title")}
               highlight={t("home.hero.titleHighlight")}
-              className="text-[clamp(36px,6.4vw,70px)] leading-[1.14] tracking-[-0.03em]"
+              className="hero-title text-[clamp(36px,6.4vw,70px)] leading-[1.14] tracking-[-0.03em]"
             />
 
             <p className={`max-w-[48ch] text-[17px] leading-[1.7] text-muted ${fadeUp(0.8).className}`} style={fadeUp(0.8).style}>
@@ -64,7 +64,7 @@ export async function Hero() {
           </div>
 
           {/* The picture, with sonar rings behind it, floating text cards over its edges, and a spinning sticker. */}
-          <div className="relative mx-auto w-full max-w-md sm:max-w-lg md:max-w-none">
+          <div className="hero-scene-wrap relative mx-auto w-full max-w-md sm:max-w-lg md:max-w-none">
             {[0, 3].map((delay) => (
               <span
                 key={delay}

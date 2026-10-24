@@ -7,7 +7,7 @@ export async function SiteFooter() {
 
   return (
     // Extra bottom padding on phones keeps the footer clear of the floating bottom bar.
-    <footer className="px-4 pb-36 pt-6 text-sm text-muted md:pb-10">
+    <footer className="site-footer px-4 pb-36 pt-6 text-sm text-muted md:pb-10">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 border-t border-line/70 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <BrandMark className="!size-8" />

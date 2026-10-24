@@ -19,7 +19,7 @@ type Props = {
 };
 
 const chip = (on: boolean) =>
-  `min-h-11 rounded-full border-[1.5px] px-4 text-[15px] font-semibold transition duration-200 active:scale-95 ${
+  `min-h-11 max-w-full rounded-full border-[1.5px] px-4 text-[15px] font-semibold transition duration-200 active:scale-95 ${
     on ? "border-midnight bg-midnight text-white dark:border-cream dark:bg-cream dark:text-midnight" : "border-line bg-surface"
   }`;
 

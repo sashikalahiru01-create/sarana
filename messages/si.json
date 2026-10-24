@@ -22,12 +22,14 @@
     "login": "ඇතුල් වන්න",
     "main": "ප්‍රධාන මෙනුව",
     "mobile": "ජංගම මෙනුව",
-    "story": "බ්‍රවුනි ගේ කතාව"
+    "story": "බ්‍රවුනි ගේ කතාව",
+    "reportCta": "Report කරන්න"
   },
   "language": {
     "label": "භාෂාව",
     "si": "සිංහල",
-    "en": "English"
+    "en": "English",
+    "ta": "தமிழ்"
   },
   "status": {
     "reported": "Report කළා",

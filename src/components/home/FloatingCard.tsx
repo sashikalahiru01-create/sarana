@@ -25,7 +25,8 @@ export function FloatingCard({
 }) {
   return (
     <div
-      className={`absolute z-10 ${position} animate-[pop-in_0.7s_cubic-bezier(0.34,1.4,0.64,1)_backwards]`}
+      data-step={step}
+      className={`hero-card absolute z-10 max-w-[16rem] ${position} animate-[pop-in_0.7s_cubic-bezier(0.34,1.4,0.64,1)_backwards]`}
       style={{ animationDelay: `${delay}s` }}
     >
       <div

@@ -22,12 +22,14 @@
     "login": "Log in",
     "main": "Main navigation",
     "mobile": "Mobile navigation",
-    "story": "Brownie's story"
+    "story": "Brownie's story",
+    "reportCta": "Report a pet"
   },
   "language": {
     "label": "Language",
     "si": "සිංහල",
-    "en": "English"
+    "en": "English",
+    "ta": "தமிழ்"
   },
   "status": {
     "reported": "Reported",

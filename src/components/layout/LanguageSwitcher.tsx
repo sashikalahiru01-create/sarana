@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
             onClick={() => {
               if (!active) startTransition(() => setLocale(locale));
             }}
-            className={`min-h-11 min-w-11 rounded-full px-3.5 text-sm font-bold transition duration-200 ${
+            className={`min-h-11 min-w-11 rounded-full px-2.5 text-[13px] sm:px-3.5 sm:text-sm font-bold transition duration-200 ${
               active ? "bg-midnight text-white dark:bg-cream dark:text-midnight" : "text-muted hover:text-foreground"
             }`}
           >

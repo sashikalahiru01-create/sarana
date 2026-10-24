@@ -264,7 +264,7 @@ export function HeroScene({ period, waiting }: Props) {
       {waiting !== null && (
         <p
           role="status"
-          className="glass absolute right-[4%] top-[66.5%] flex items-center gap-2 rounded-full py-1.5 pl-3 pr-3.5 text-[12px] font-bold text-foreground animate-[pop-in_0.6s_cubic-bezier(0.34,1.4,0.64,1)_1.1s_backwards] sm:text-[13px]"
+          className="glass absolute right-[4%] top-[66.5%] flex max-w-[64%] items-center gap-2 rounded-full py-1.5 pl-3 pr-3.5 text-[12px] font-bold text-foreground animate-[pop-in_0.6s_cubic-bezier(0.34,1.4,0.64,1)_1.1s_backwards] sm:text-[13px]"
         >
           <span aria-hidden="true" className="relative grid size-2.5 shrink-0 place-items-center">
             <span className={`absolute size-2.5 rounded-full ${worried ? "animate-ping bg-coral/60" : "bg-green/40"}`} />

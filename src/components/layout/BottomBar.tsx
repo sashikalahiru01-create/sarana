@@ -25,7 +25,7 @@ export function BottomBar() {
   return (
     <nav
       aria-label={t("nav.mobile")}
-      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-40 mx-auto max-w-md rounded-[28px] border border-(--glass-line) bg-(--glass) shadow-pop backdrop-blur-xl backdrop-saturate-150 md:hidden"
+      className="bottom-bar fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-40 mx-auto max-w-md rounded-[28px] border border-(--glass-line) bg-(--glass) shadow-pop backdrop-blur-xl backdrop-saturate-150 md:hidden"
     >
       <ul className="grid grid-cols-5 items-end px-1.5">
         {items.map(({ href, label, icon: Icon }) => {

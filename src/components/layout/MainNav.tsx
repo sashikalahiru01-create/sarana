@@ -18,7 +18,7 @@ export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label={t("nav.main")} className="hidden items-center gap-1 md:flex">
+    <nav aria-label={t("nav.main")} className="site-nav hidden items-center gap-1 md:flex">
       {links.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
@@ -26,7 +26,7 @@ export function MainNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-11 items-center whitespace-nowrap rounded-full px-4 font-semibold transition duration-200 ${
+            className={`${href === "/about" ? "nav-about " : href === "/story" ? "nav-story " : ""}flex min-h-11 items-center whitespace-nowrap rounded-full px-3 font-semibold xl:px-4 transition duration-200 ${
               active
                 ? "bg-coral/12 text-coral-ink dark:text-brownie"
                 : "text-foreground/80 hover:bg-foreground/6 hover:text-foreground"

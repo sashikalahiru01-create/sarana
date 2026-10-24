@@ -1,5 +1,6 @@
-// Tamil ("ta") is added later: add it here, add messages/ta.json, and register it in messages.ts.
-export const locales = ["si", "en"] as const;
+// To add a language: add it here, add messages/<code>.json (same keys as en.json), register it in messages.ts,
+// and add a "language.<code>" name to every messages file. The order here is the order of the language switcher.
+export const locales = ["si", "ta", "en"] as const;
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "si";
