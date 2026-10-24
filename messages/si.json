@@ -8,7 +8,9 @@
     "appName": "Sarana",
     "tagline": "අසරණ සතුන්ට උදව්වක්",
     "skipToContent": "ප්‍රධාන අන්තර්ගතයට පනින්න",
-    "loading": "Load වෙමින්…"
+    "loading": "Load වෙමින්…",
+    "soundOn": "ශබ්දය on",
+    "soundOff": "ශබ්දය off"
   },
   "nav": {
     "home": "මුල් පිටුව",

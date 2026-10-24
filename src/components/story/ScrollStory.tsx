@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useT } from "@/i18n/client";
+import { playBark } from "@/lib/dog-sound";
 import { StoryScene } from "./StoryScene";
 
 const steps = ["s1", "s2", "s3", "s4", "s5"] as const;
@@ -184,6 +185,7 @@ export function ScrollStory() {
         gsap.timeline().to(pose, { earKick: 60, duration: 0.25, ease: "back.out(3)" }).to(pose, { earKick: 0, duration: 0.7, ease: "elastic.out(1,.4)", delay: 0.25 });
       };
       const bark = () => {
+        playBark("woof");
         const s = root.getBoundingClientRect();
         const r = headEl.getBoundingClientRect();
         barkBubble.style.left = r.left + r.width / 2 - s.left + "px";

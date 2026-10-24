@@ -3,7 +3,9 @@
 import { PawPrint } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Brownie, type BrownieMood } from "@/components/brownie/Brownie";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 import { useT } from "@/i18n/client";
+import { playBark, playWoofWoof } from "@/lib/dog-sound";
 import type { DayPeriod, Waiting } from "@/lib/hero";
 import { useHeroAsk } from "./hero-ask";
 import { StreetView, SunnyStreet } from "./StreetView";
@@ -111,12 +113,24 @@ export function HeroScene({ period, waiting }: Props) {
 
   useEffect(() => () => clearTimeout(barkTimer.current), []);
 
+  // Sound for the bow: "woof woof" on the first nod, then a soft yip on the next two.
+  // The nods go down every second, starting after about half a second. The sound stays silent
+  // until the visitor has clicked or tapped the page once (a browser rule), or if they muted it.
+  const lastBowSound = useRef(0);
+  useEffect(() => {
+    if (!hovering || Date.now() - lastBowSound.current < 3500) return;
+    lastBowSound.current = Date.now();
+    const timers = [setTimeout(playWoofWoof, 450), setTimeout(() => playBark("yip", 1.05), 1500), setTimeout(() => playBark("yip", 1.15), 2500)];
+    return () => timers.forEach(clearTimeout);
+  }, [hovering]);
+
   const lookingAtYou = reduced || hovering || gaze === "front";
   const showHint = worried && (reduced || (hint && !hovering));
   // Pointing at the Report button wakes him up: a happy bow, with his paw showing you the button.
   const mood: BrownieMood = hovering ? "happy" : baseMood;
 
   const onBark = () => {
+    playBark("woof");
     setBarked(true);
     clearTimeout(barkTimer.current);
     barkTimer.current = setTimeout(() => setBarked(false), 1000);
@@ -237,6 +251,8 @@ export function HeroScene({ period, waiting }: Props) {
       >
         {t("home.hero.bark")}
       </p>
+
+      <SoundToggle className="absolute left-3 top-3 z-10" />
 
       <div aria-hidden="true" className="story-grain pointer-events-none absolute inset-0 opacity-[0.06]" />
     </div>

@@ -77,13 +77,13 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
       const pawEl = part("pawR");
 
       const applyPose = () => {
-        const b = pose.breathe;
+        const b = pose.breathe * (1 - 0.06 * pose.bow); // bowing also lowers the chest a little
         const lift = (b - 1) * 122;
         bodyEl.setAttribute("transform", `translate(0 ${350 * (1 - b)}) scale(1 ${b})`);
-        headEl.setAttribute("transform", `translate(${pose.headX} ${pose.headY + pose.bow * 24 - lift}) rotate(${pose.head + pose.bow * 5} 200 240)`);
+        headEl.setAttribute("transform", `translate(${pose.headX} ${pose.headY + pose.bow * 36 - lift}) rotate(${pose.head + pose.bow * 7} 200 240)`);
         pawEl.setAttribute("transform", `rotate(${pose.paw} 235 302)`);
         earEl.setAttribute("transform", `rotate(${pose.ear + pose.earKick} 152 112)`);
-        tailEl.setAttribute("transform", `translate(0 ${-(b - 1) * 50}) rotate(${pose.tail + pose.wag} 282 300)`);
+        tailEl.setAttribute("transform", `translate(0 ${-(b - 1) * 50}) rotate(${pose.tail + pose.wag - pose.bow * 18} 282 300)`);
       };
       applyPose();
       gsap.ticker.add(applyPose);
@@ -174,11 +174,13 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         bowTween = null;
         if (!on) {
           gsap.to(pose, { bow: 0, duration: 0.4, ease: "power2.out" });
+          applyGazeRef.current?.(false); // eyes go back to where the gaze says
         } else if (reduce) {
           gsap.to(pose, { bow: 1, duration: 0 });
         } else {
           bowTween = gsap.fromTo(pose, { bow: 0.15 }, { bow: 1, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: -1 });
         }
+        if (on) lookAt(0, -3.5, false); // eyes up at you, head down: a polite "please"
       };
       applyMoodRef.current(moodRef.current, true);
       applyGazeRef.current(true);

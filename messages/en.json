@@ -8,7 +8,9 @@
     "appName": "Sarana",
     "tagline": "Helping street animals",
     "skipToContent": "Skip to content",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "soundOn": "Sound on",
+    "soundOff": "Sound off"
   },
   "nav": {
     "home": "Home",
