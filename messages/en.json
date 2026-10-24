@@ -35,6 +35,45 @@
   "home": {
     "title": "The next Brownie might be on your street.",
     "subtitle": "All it takes is a photo and a location. The community does the rest.",
-    "reportCta": "Report a pet"
+    "reportCta": "Report a pet",
+    "replay": "Watch the story again"
+  },
+  "story": {
+    "hint": "Scroll down",
+    "alt": "A woman stops for a street dog in the rain, reports it, comes back to feed it, and finally gives it a home",
+    "dogLabel": "Brownie the dog. Press to make him bark.",
+    "bark": "Woof!",
+    "toastTitle": "New report · 0.4 km",
+    "toastBody": "3 nearby volunteers were notified",
+    "s1": {
+      "kicker": "01 / 05 · Alone on the street",
+      "title": "11 pm. Rain. Nobody stops.",
+      "body": "People hurry past under their umbrellas. He is still watching, hoping someone will stop. One ear has drooped.",
+      "dot": "Alone"
+    },
+    "s2": {
+      "kicker": "02 / 05 · Someone stopped",
+      "title": "All she had was a phone.",
+      "body": "She took a photo. She didn't have to download an app. She opened the website and pressed the camera button.",
+      "dot": "Photo"
+    },
+    "s3": {
+      "kicker": "03 / 05 · Onto the map",
+      "title": "A pin. Now everyone can see.",
+      "body": "The location landed on the map. Volunteers nearby were notified right away.",
+      "dot": "Map"
+    },
+    "s4": {
+      "kicker": "04 / 05 · A volunteer came",
+      "title": "For the first time, someone came close.",
+      "body": "A volunteer nearby saw the notification and came with a bowl of food. A gentle hand stroked his head, and the drooping ear slowly lifted.",
+      "dot": "Help"
+    },
+    "s5": {
+      "kicker": "05 / 05 · A home",
+      "title": "Now he has a name. Brownie.",
+      "body": "The same person who stopped that rainy night finally gave him a home. Both ears are up now.",
+      "dot": "Home"
+    }
   }
 }

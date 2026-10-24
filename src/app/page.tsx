@@ -1,36 +1,29 @@
 import { Camera } from "lucide-react";
 import Link from "next/link";
+import { ReplayButton } from "@/components/story/ReplayButton";
+import { ScrollStory } from "@/components/story/ScrollStory";
 import { getTranslator } from "@/i18n/server";
-
-// Placeholder home page: it only proves the tokens, fonts and translations work.
-// Step 2 replaces it with the Brownie scroll story.
-const statuses = [
-  { key: "status.reported", className: "bg-coral" },
-  { key: "status.help_on_the_way", className: "bg-blue" },
-  { key: "status.safe", className: "bg-green" },
-  { key: "status.adopted", className: "bg-gold !text-midnight" },
-] as const;
 
 export default async function HomePage() {
   const { t } = await getTranslator();
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col items-start gap-6 px-4 py-16">
-      <h1 className="text-4xl sm:text-5xl">{t("home.title")}</h1>
-      <p className="max-w-[60ch] text-lg text-muted">{t("home.subtitle")}</p>
+    <>
+      <ScrollStory />
 
-      <Link href="/report" className="btn btn-primary">
-        <Camera size={20} aria-hidden="true" />
-        {t("home.reportCta")}
-      </Link>
-
-      <ul className="flex flex-wrap gap-2">
-        {statuses.map(({ key, className }) => (
-          <li key={key} className={`chip ${className}`}>
-            {t(key)}
-          </li>
-        ))}
-      </ul>
-    </div>
+      <section className="bg-cream px-4 pb-[72px] pt-24 text-midnight dark:bg-midnight dark:text-cream">
+        <div className="mx-auto flex max-w-[900px] flex-col items-start gap-5">
+          <h2 className="text-[clamp(30px,4.6vw,54px)] tracking-[-0.8px]">{t("home.title")}</h2>
+          <p className="max-w-[60ch] text-[17px] leading-[1.7] text-[#5b5346] dark:text-cream/75">{t("home.subtitle")}</p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/report" className="btn btn-primary !min-h-14">
+              <Camera size={20} aria-hidden="true" />
+              {t("home.reportCta")}
+            </Link>
+            <ReplayButton />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

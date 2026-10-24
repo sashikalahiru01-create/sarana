@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Noto_Sans_Sinhala, Noto_Sans_Tamil } from "next/font/google";
 import { BottomBar } from "@/components/layout/BottomBar";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { I18nProvider } from "@/i18n/client";
 import { getMessages } from "@/i18n/messages";
@@ -60,10 +61,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {t("common.skipToContent")}
           </a>
           <SiteHeader />
-          {/* Bottom padding keeps content clear of the fixed mobile bar. */}
-          <main id="main" className="flex-1 pb-24 md:pb-0">
+          <main id="main" className="flex-1">
             {children}
           </main>
+          <SiteFooter />
           <BottomBar />
         </I18nProvider>
       </body>
