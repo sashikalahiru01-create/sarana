@@ -8,7 +8,7 @@ const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const results = [];
 const check = (name, ok, detail = "") => results.push({ name, ok, detail });
 
-if (!url || url.includes("YOUR-PROJECT-REF") || !key || key.includes("xxxxxxxx")) {
+if (!url || url.includes("YOUR-PROJECT-REF") || !key || key.includes("xxxxxxxx") || key.includes("PASTE_YOUR")) {
   console.error("✗ .env.local is missing or still has the placeholder values.");
   console.error("  Copy .env.example to .env.local and paste your project URL and publishable key.");
   process.exit(1);
