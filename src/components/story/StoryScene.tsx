@@ -24,8 +24,27 @@ export function StoryScene({ dogLabel }: { dogLabel: string }) {
       <radialGradient id="screenGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stopColor="#BFD8FF" stopOpacity=".55"/><stop offset="1" stopColor="#BFD8FF" stopOpacity="0"/></radialGradient>
       <filter id="soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
       <filter id="far"><feGaussianBlur stdDeviation="1.2"/></filter>
+      <filter id="dustBlur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2.2"/></filter>
+      <radialGradient id="sunGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stopColor="#FFF0B8" stopOpacity=".95"/><stop offset=".35" stopColor="#FFD76A" stopOpacity=".45"/><stop offset="1" stopColor="#FFD76A" stopOpacity="0"/></radialGradient>
+      <radialGradient id="sunBeam" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="620"><stop offset="0" stopColor="#FFF3C4" stopOpacity=".7"/><stop offset=".45" stopColor="#FFF3C4" stopOpacity=".28"/><stop offset="1" stopColor="#FFF3C4" stopOpacity="0"/></radialGradient>
       </defs>
-      
+
+      {/* sunshine (scene 5): the sun sits behind the house; its beams are drawn later, in front.
+          #sunPos is placed by ScrollStory so the sun stays in view on desktop and on phones. */}
+      <g id="sun" opacity="0">
+      <g id="sunPos" transform="translate(150 125)">
+      <circle r="190" fill="url(#sunGlow)"/>
+      <g id="sunRays" stroke="#FFB32E" strokeWidth="7" strokeLinecap="round">
+      {Array.from({ length: 16 }, (_, i) => (
+        <line key={i} y1="-62" y2={i % 2 ? -86 : -106} transform={`rotate(${i * 22.5})`} />
+      ))}
+      </g>
+      <circle r="50" fill="#FFC93C"/>
+      <circle r="44" fill="#FFD76A"/>
+      <circle r="35" fill="#FFF0B8"/>
+      </g>
+      </g>
+
       {/* far city */}
       <g id="city" filter="url(#far)">
       <g fill="#182247">
@@ -114,8 +133,27 @@ export function StoryScene({ dogLabel }: { dogLabel: string }) {
       <g stroke="#B07036" strokeWidth="2.4" strokeLinecap="round" fill="none" opacity=".45">
       <path d="M118 270q6 -6 12 -4"/><path d="M128 300q6 -6 12 -4"/><path d="M262 262q6 -6 12 -2"/><path d="M270 290q6 -6 12 -2"/>
       </g>
+      {/* street dust and mud: gone once he is cared for (scene 5) */}
+      <g className="dust" filter="url(#dustBlur)">
+      <ellipse cx="160" cy="262" rx="30" ry="14" transform="rotate(-12 160 262)" fill="#6B4A2B" opacity=".28"/>
+      <ellipse cx="236" cy="316" rx="30" ry="12" fill="#6B4A2B" opacity=".24"/>
+      <ellipse cx="256" cy="284" rx="15" ry="9" fill="#5A4128" opacity=".3"/>
+      <ellipse cx="128" cy="304" rx="14" ry="9" fill="#5A4128" opacity=".26"/>
+      <ellipse cx="165" cy="336" rx="19" ry="11" fill="#5A4128" opacity=".34"/>
+      <ellipse cx="235" cy="337" rx="19" ry="10" fill="#5A4128" opacity=".34"/>
+      <ellipse cx="165" cy="347" rx="23" ry="9" fill="#8A7358" opacity=".5"/>
+      <ellipse cx="235" cy="347" rx="23" ry="9" fill="#8A7358" opacity=".5"/>
+      </g>
+      <g className="dust" fill="#4A3520" opacity=".5">
+      <circle cx="148" cy="268" r="2.2"/><circle cx="176" cy="254" r="1.6"/><circle cx="190" cy="274" r="2"/><circle cx="224" cy="262" r="1.8"/>
+      <circle cx="244" cy="300" r="2.4"/><circle cx="210" cy="326" r="1.8"/><circle cx="132" cy="288" r="1.8"/><circle cx="172" cy="324" r="2.2"/>
+      <circle cx="258" cy="268" r="1.6"/><circle cx="122" cy="322" r="1.6"/>
+      </g>
+      {/* collar and tag: only a home gives him one (scene 5) */}
+      <g id="collar" opacity="0">
       <path d="M146 228 Q200 246 254 228 L254 242 Q200 260 146 242Z" fill="#1F8A70"/>
       <circle cx="200" cy="256" r="9" fill="#F2B544"/><circle cx="197" cy="253" r="3" fill="#FFE7A0"/>
+      </g>
       </g>
       <g id="head">
       <g id="earL"><path d="M150 128 C 122 84, 126 50, 148 40 C 174 56, 180 98, 174 128 Z" fill="url(#earFur)"/><path d="M156 116 C 142 86, 144 64, 150 56 C 164 72, 166 96, 164 116 Z" fill="#E9A79A" opacity=".75"/></g>
@@ -124,6 +162,15 @@ export function StoryScene({ dogLabel }: { dogLabel: string }) {
       <ellipse cx="238" cy="146" rx="30" ry="28" fill="#B9773D" opacity=".75"/>
       <g stroke="#B07036" strokeWidth="2.4" strokeLinecap="round" fill="none" opacity=".5">
       <path d="M170 92q6 -8 14 -6"/><path d="M196 88q6 -8 14 -4"/><path d="M128 150q-2 -8 4 -14"/><path d="M272 150q2 -8 -4 -14"/>
+      </g>
+      <g className="dust" filter="url(#dustBlur)">
+      <ellipse cx="152" cy="116" rx="24" ry="11" transform="rotate(-24 152 116)" fill="#6B4A2B" opacity=".26"/>
+      <ellipse cx="236" cy="190" rx="17" ry="9" fill="#5A4128" opacity=".22"/>
+      <ellipse cx="206" cy="102" rx="20" ry="8" fill="#6B4A2B" opacity=".2"/>
+      <ellipse cx="132" cy="176" rx="12" ry="8" fill="#5A4128" opacity=".24"/>
+      </g>
+      <g className="dust" fill="#4A3520" opacity=".5">
+      <circle cx="174" cy="108" r="1.8"/><circle cx="214" cy="116" r="1.5"/><circle cx="244" cy="128" r="2"/><circle cx="140" cy="140" r="1.6"/><circle cx="168" cy="204" r="1.4"/>
       </g>
       <ellipse id="dogRim" cx="150" cy="120" rx="70" ry="60" fill="url(#rim)"/>
       <g className="eye" id="eyeL"><ellipse className="socket" cx="170" cy="160" rx="17" ry="16" fill="#FFFFFF" stroke="#3A2614" strokeWidth="2.5"/><g id="pupilL"><circle cx="170" cy="161" r="9" fill="#0A0705"/><circle cx="173.5" cy="156.5" r="3" fill="#fff"/><circle cx="167" cy="165" r="1.3" fill="#fff" opacity=".8"/></g></g>
@@ -280,7 +327,23 @@ export function StoryScene({ dogLabel }: { dogLabel: string }) {
       <path className="heart" transform="translate(560,150) scale(.8)" d="M0 -6 C -6 -16 -20 -8 -12 4 L0 16 L12 4 C 20 -8 6 -16 0 -6Z" fill="#F2B544" opacity="0"/>
       <path className="heart" transform="translate(470,110) scale(1.2)" d="M0 -6 C -6 -16 -20 -8 -12 4 L0 16 L12 4 C 20 -8 6 -16 0 -6Z" fill="#E4572E" opacity="0"/>
       </g>
-      
+
+      {/* sunbeams fanning out from the sun over the home scene (scene 5) */}
+      <g id="sunBeams" opacity="0" pointerEvents="none" style={{ mixBlendMode: "screen" }} transform="translate(150 125)">
+      <polygon points="0,0 250,510 440,430" fill="url(#sunBeam)"/>
+      <polygon points="0,0 480,330 640,230" fill="url(#sunBeam)" opacity=".8"/>
+      <polygon points="0,0 70,520 230,520" fill="url(#sunBeam)" opacity=".7"/>
+      </g>
+      {/* dust motes drifting in the light */}
+      <g id="sunMotes" opacity="0" pointerEvents="none" fill="#FFF3C4">
+      {[
+        [330, 300, 2.4], [400, 250, 1.8], [470, 330, 2.6], [520, 200, 1.8], [560, 380, 2.2],
+        [610, 270, 2.4], [300, 390, 1.8], [450, 160, 2], [640, 340, 2.2], [380, 190, 1.6],
+      ].map(([cx, cy, r]) => (
+        <circle key={`${cx}-${cy}`} className="mote" cx={cx} cy={cy} r={r} />
+      ))}
+      </g>
+
       <rect id="nightTint" x="-3000" y="0" width="7000" height="600" fill="#0D1838" opacity=".22" pointerEvents="none" style={{ mixBlendMode: "multiply" }}/>
       <g id="rain" stroke="#A9BEE6" strokeWidth="1.6" strokeLinecap="round" opacity=".55"></g>
       <rect id="flash" x="-3000" y="0" width="7000" height="600" fill="#fff" opacity="0" pointerEvents="none"/>

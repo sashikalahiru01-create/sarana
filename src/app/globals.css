@@ -156,6 +156,12 @@ h3 {
 }
 .dog-hit {
   cursor: pointer;
+  outline: none;
+}
+/* A rectangle around Brownie looks wrong, so keyboard focus is shown as a warm glow instead. */
+.dog-hit:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 10px rgb(242 181 68 / 0.95));
 }
 
 /* Skeleton shimmer for loading lists, maps and cards (never an empty spinner). */

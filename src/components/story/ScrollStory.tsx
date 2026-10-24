@@ -32,7 +32,14 @@ export function ScrollStory() {
     let disposed = false;
 
     // Frame the scene: wide on desktop, closer on phones. The scene stays hidden until framed so phones don't see a jump.
-    const frame = () => world.setAttribute("viewBox", innerWidth < 640 ? "250 60 560 480" : "0 0 1000 560");
+    const frame = () => {
+      const phone = innerWidth < 640;
+      world.setAttribute("viewBox", phone ? "250 60 560 480" : "0 0 1000 560");
+      // The sun sits on the left. On phones the view is cropped to x 250-810, so it moves in to stay visible.
+      const sun = phone ? "translate(388 104)" : "translate(150 125)";
+      q("#sunPos").setAttribute("transform", sun);
+      q("#sunBeams").setAttribute("transform", sun);
+    };
     frame();
     world.dataset.ready = "true";
     addEventListener("resize", frame);
@@ -101,6 +108,7 @@ export function ScrollStory() {
       gsap.set("#house", { y: 30 });
       gsap.set("#petArm", { transformOrigin: "100% 50%" });
       gsap.set("#toast", { y: -16 });
+      gsap.set("#sun", { y: 60 });
       gsap.set("#bark", { xPercent: -50 });
       const leash = q<SVGPathElement>("#leash");
       const len = leash.getTotalLength();
@@ -123,6 +131,11 @@ export function ScrollStory() {
         };
         gsap.delayedCall(2, blink);
         gsap.to("#tear", { y: 22, opacity: 0, duration: 1.8, repeat: -1, ease: "power1.in", repeatDelay: 1.2 });
+        // Pivot on the centre of the rays (the sun's centre). GSAP's default SVG pivot is the bounding box corner, which swung the rays off the disc.
+        gsap.to("#sunRays", { rotation: 360, transformOrigin: "50% 50%", duration: 70, repeat: -1, ease: "none" });
+        qa(".mote").forEach((m) => {
+          gsap.fromTo(m, { opacity: 0.15, y: 0 }, { opacity: 0.95, y: -14 - Math.random() * 14, duration: 2 + Math.random() * 2.5, repeat: -1, yoyo: true, ease: "sine.inOut", delay: Math.random() * 2 });
+        });
       }
       const wag = gsap.fromTo(pose, { wag: 0 }, { wag: -40, duration: 0.18, repeat: -1, yoyo: true, ease: "sine.inOut", paused: true });
 
@@ -254,12 +267,16 @@ export function ScrollStory() {
       tl.to("#skyWarm", { opacity: 1, duration: 1 }, 5.4)
         .to("#groundWarm", { opacity: 1, duration: 1 }, 5.4)
         .to("#puddles,#lamp,#street,#city", { opacity: 0, duration: 0.5 }, 5.4)
+        .to("#sun", { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 5.45)
+        .to("#sunBeams,#sunMotes", { opacity: 1, duration: 1.1 }, 5.9)
         .to("#house", { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.4)" }, 5.5)
         .to("#crouch,#bowl", { opacity: 0, duration: 0.3 }, 5.6)
         .to("#home", { opacity: 1, duration: 0.4 }, 5.65)
         .to(leash, { opacity: 1, duration: 0.1 }, 5.8)
         .to(leash, { strokeDashoffset: 0, duration: 0.5 }, 5.8)
         .to(pose, { ear: 0, duration: 0.7, ease: "elastic.out(1,.45)" }, 5.85)
+        .to(".dust", { opacity: 0, duration: 0.8 }, 5.9)
+        .to("#collar", { opacity: 1, duration: 0.4 }, 5.95)
         .to("#sadFace,#sadMouth", { opacity: 0, duration: 0.25 }, 5.85)
         .to("#happyFace,#happyMouth", { opacity: 1, duration: 0.25 }, 5.9)
         .to(pose, { head: 4, duration: 0.5 }, 5.85)
@@ -325,7 +342,7 @@ export function ScrollStory() {
           preserveAspectRatio="xMidYMax meet"
           role="group"
           aria-label={t("story.alt")}
-          className="block size-full opacity-0 transition-opacity duration-300 data-[ready=true]:opacity-100"
+          className="block size-full overflow-visible opacity-0 transition-opacity duration-300 data-[ready=true]:opacity-100"
         >
           <StoryScene dogLabel={t("story.dogLabel")} />
         </svg>
