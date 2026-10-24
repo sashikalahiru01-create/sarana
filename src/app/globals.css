@@ -164,6 +164,72 @@ h3 {
   filter: drop-shadow(0 0 10px rgb(242 181 68 / 0.95));
 }
 
+/* Hero scene motion. The global reduced-motion rule below turns all of these off. */
+@keyframes rain-fall {
+  from {
+    transform: translate3d(0, -30%, 0);
+  }
+  to {
+    transform: translate3d(-8px, 420%, 0);
+  }
+}
+@keyframes float-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate3d(6px, -16px, 0);
+    opacity: 0.9;
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.55) translateY(14px);
+  }
+}
+@keyframes trail-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+@keyframes glint {
+  0%,
+  88%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.1;
+  }
+}
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.2deg);
+  }
+}
+
 /* Skeleton shimmer for loading lists, maps and cards (never an empty spinner). */
 .shimmer {
   background: linear-gradient(90deg, var(--line) 25%, color-mix(in srgb, var(--line) 55%, var(--surface)) 50%, var(--line) 75%);

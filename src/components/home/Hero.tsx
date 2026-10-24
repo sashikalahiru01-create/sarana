@@ -9,15 +9,21 @@ export async function Hero() {
   const [{ t }, waiting] = await Promise.all([getTranslator(), getWaitingCount()]);
   const period = getDayPeriod();
 
-  // Brownie's mood comes from real reports: worried while urgent animals wait, otherwise happy (asleep at night).
+  // Brownie has a home, so he is clean and safe. His mood follows real reports: sad and thinking of the
+  // animals still waiting, otherwise happy (asleep at night).
   const worried = (waiting ?? 0) > 0;
-  const mood: BrownieMood = worried ? "worried" : period === "night" ? "sleeping" : "happy";
-  const bubble = waiting === null ? null : worried ? t("home.hero.waiting", { n: waiting }) : t("home.hero.allSafe");
+  const mood: BrownieMood = worried ? "thinking" : period === "night" ? "sleeping" : "happy";
 
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-6 pt-8 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pb-10 md:pt-14">
       <div className="flex flex-col items-start gap-5">
-        <p className="eyebrow">{t("home.hero.eyebrow")}</p>
+        <p className="glass inline-flex items-center gap-2 rounded-full py-1.5 pl-3 pr-4 text-[13px] font-bold text-coral-ink dark:text-brownie">
+          <span aria-hidden="true" className="relative grid size-2.5 place-items-center">
+            <span className="absolute size-2.5 animate-ping rounded-full bg-coral/50" />
+            <span className="size-2.5 rounded-full bg-coral" />
+          </span>
+          {t("home.hero.eyebrow")}
+        </p>
         <h1 className="text-[clamp(34px,6.2vw,66px)] leading-[1.12] tracking-[-0.03em]">{t("home.hero.title")}</h1>
         <p className="max-w-[48ch] text-[17px] leading-[1.7] text-muted">{t("home.hero.subtitle")}</p>
 
@@ -42,7 +48,7 @@ export async function Hero() {
         </ul>
       </div>
 
-      <HeroScene period={period} mood={mood} bubble={bubble} bubbleTone={worried ? "waiting" : "safe"} />
+      <HeroScene period={period} mood={mood} waiting={waiting} />
     </section>
   );
 }

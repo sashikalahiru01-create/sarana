@@ -3,7 +3,8 @@
 import { useEffect, useId, useRef } from "react";
 import gsap from "gsap";
 
-export type BrownieMood = "worried" | "happy" | "sleeping";
+/** thinking: clean and safe at home, but sad, looking up at the animals still out in the rain. */
+export type BrownieMood = "worried" | "thinking" | "happy" | "sleeping";
 
 type Props = {
   mood: BrownieMood;
@@ -22,6 +23,7 @@ type Props = {
 /** Where each mood puts the joints. Same rig as the story: ears, head and tail pivot on fixed points. */
 const POSES: Record<BrownieMood, { ear: number; head: number; tail: number }> = {
   worried: { ear: -105, head: -6, tail: 62 },
+  thinking: { ear: -40, head: 9, tail: 56 },
   happy: { ear: 0, head: 4, tail: 20 },
   sleeping: { ear: -70, head: 16, tail: 48 },
 };
@@ -70,6 +72,8 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
 
       const wag = gsap.fromTo(pose, { wag: 0 }, { wag: -34, duration: 0.2, repeat: -1, yoyo: true, ease: "sine.inOut", paused: true });
       const zzz = part("zzz");
+      const pupils = [part("pupilL"), part("pupilR")];
+      const GAZE = { x: 6, y: -7 };
 
       // Ambient life (off with reduced motion)
       if (!reduce) {
@@ -90,6 +94,14 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         gsap.delayedCall(2, blink);
         gsap.to(part("tear"), { y: 22, opacity: 0, duration: 1.8, repeat: -1, ease: "power1.in", repeatDelay: 1.2 });
         gsap.to(zzz, { y: -10, duration: 1.8, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        const glance = () => {
+          if (disposed) return;
+          if (moodRef.current === "thinking") {
+            gsap.timeline().to(pupils, { x: -2, y: 2, duration: 0.3 }).to(pupils, { ...GAZE, duration: 0.5, delay: 1.1 });
+          }
+          gsap.delayedCall(5 + Math.random() * 3, glance);
+        };
+        gsap.delayedCall(4, glance);
       }
 
       // Mood changes move the joints and swap the face
@@ -106,13 +118,14 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         const target = POSES[m];
         const d = immediate ? 0 : 0.7;
         gsap.to(pose, { ear: target.ear, head: target.head, tail: target.tail, duration: d, ease: m === "happy" ? "elastic.out(1,.5)" : "power2.out", overwrite: "auto" });
-        const sad = m === "worried" ? 1 : 0;
-        const happy = m === "worried" ? 0 : 1;
+        const sad = m === "worried" || m === "thinking" ? 1 : 0;
+        const happy = 1 - sad;
         gsap.to([faces.sadFace, faces.sadMouth], { opacity: sad, duration: d / 2 });
         gsap.to([faces.happyFace, faces.happyMouth], { opacity: happy, duration: d / 2 });
         gsap.to(faces.eyes, { opacity: m === "sleeping" ? 0 : 1, duration: d / 2 });
         gsap.to(faces.closedEyes, { opacity: m === "sleeping" ? 1 : 0, duration: d / 2 });
         gsap.to(faces.zzz, { opacity: m === "sleeping" ? 1 : 0, duration: d / 2 });
+        gsap.to(pupils, m === "thinking" ? { ...GAZE, duration: d } : { x: 0, y: 0, duration: d });
         if (m === "happy" && !reduce) wag.play();
         else wag.pause();
         if (m !== "happy") gsap.to(pose, { wag: 0, duration: 0.3 });
@@ -128,7 +141,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         y: gsap.quickTo(part(`pupil${side}`), "y", { duration: 0.35, ease: "power3" }),
       }));
       const look = (cx: number, cy: number) => {
-        if (moodRef.current === "sleeping") return;
+        if (moodRef.current === "sleeping" || moodRef.current === "thinking") return;
         movers.forEach((m) => {
           const r = m.socket.getBoundingClientRect();
           const ex = r.left + r.width / 2;
