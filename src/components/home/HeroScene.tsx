@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Brownie, type BrownieMood } from "@/components/brownie/Brownie";
 import { SoundToggle } from "@/components/ui/SoundToggle";
 import { useT } from "@/i18n/client";
-import { playBark, playWoofWoof } from "@/lib/dog-sound";
+import { playBark } from "@/lib/dog-sound";
 import type { DayPeriod, Waiting } from "@/lib/hero";
 import { useHeroAsk } from "./hero-ask";
 import { StreetView, SunnyStreet } from "./StreetView";
@@ -80,7 +80,15 @@ export function HeroScene({ period, waiting }: Props) {
   const [gaze, setGaze] = useState<"side" | "front">("side");
   const [hint, setHint] = useState(false);
   const [barked, setBarked] = useState(false);
+  const [barkCue, setBarkCue] = useState({ id: 0, short: false });
   const barkTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // The "Woof!" bubble pops up for a moment.
+  const flashBubble = () => {
+    setBarked(true);
+    clearTimeout(barkTimer.current);
+    barkTimer.current = setTimeout(() => setBarked(false), 1000);
+  };
 
   // The story loop (about 9 seconds): look out of the window, turn to you, ask, look out again.
   // It pauses while you point at the Report button, and stays on "looking at you" with reduced motion.
@@ -113,14 +121,27 @@ export function HeroScene({ period, waiting }: Props) {
 
   useEffect(() => () => clearTimeout(barkTimer.current), []);
 
-  // Sound for the bow: "woof woof" on the first nod, then a soft yip on the next two.
+  // The bow barks: "woof woof" on the first nod, then a soft yip on the next two. Every sound comes with
+  // a real bark on Brownie (mouth open, head jerk, ear flick), so what you hear is what you see.
   // The nods go down every second, starting after about half a second. The sound stays silent
-  // until the visitor has clicked or tapped the page once (a browser rule), or if they muted it.
-  const lastBowSound = useRef(0);
+  // until the visitor has clicked or tapped the page once (a browser rule), or if they muted it;
+  // the barking animation plays either way.
+  const lastBowBarks = useRef(0);
   useEffect(() => {
-    if (!hovering || Date.now() - lastBowSound.current < 3500) return;
-    lastBowSound.current = Date.now();
-    const timers = [setTimeout(playWoofWoof, 450), setTimeout(() => playBark("yip", 1.05), 1500), setTimeout(() => playBark("yip", 1.15), 2500)];
+    if (!hovering || Date.now() - lastBowBarks.current < 3500) return;
+    lastBowBarks.current = Date.now();
+    let id = 0;
+    const bark = (kind: "woof" | "yip", pitch: number) => {
+      playBark(kind, pitch);
+      setBarkCue({ id: Date.now() + id++, short: kind === "yip" });
+      if (kind === "woof") flashBubble();
+    };
+    const timers = [
+      setTimeout(() => bark("woof", 1), 450),
+      setTimeout(() => bark("woof", 1.12), 720),
+      setTimeout(() => bark("yip", 1.05), 1500),
+      setTimeout(() => bark("yip", 1.15), 2500),
+    ];
     return () => timers.forEach(clearTimeout);
   }, [hovering]);
 
@@ -131,9 +152,7 @@ export function HeroScene({ period, waiting }: Props) {
 
   const onBark = () => {
     playBark("woof");
-    setBarked(true);
-    clearTimeout(barkTimer.current);
-    barkTimer.current = setTimeout(() => setBarked(false), 1000);
+    flashBubble();
   };
 
   return (
@@ -211,6 +230,7 @@ export function HeroScene({ period, waiting }: Props) {
         pawUp={hovering || (worried && lookingAtYou)}
         pawDir={hovering ? -1 : 1}
         bow={hovering}
+        bark={barkCue}
         interactive
         collar
         label={t("home.hero.brownie")}

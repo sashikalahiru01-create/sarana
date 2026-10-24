@@ -30,6 +30,11 @@ type Props = {
   pawDir?: 1 | -1;
   /** Bow politely, nodding again and again ("please do it"). */
   bow?: boolean;
+  /**
+   * Make him bark on cue, for example along with a sound. Pass a new object (a new `id`) for each bark;
+   * `short` is a quick yip with a smaller mouth movement. Needs `interactive`.
+   */
+  bark?: { id: number; short?: boolean };
   className?: string;
 };
 
@@ -45,7 +50,7 @@ const POSES: Record<BrownieMood, { ear: number; head: number; tail: number }> = 
  * Brownie, the Sarana mascot. A tan street dog built as an SVG rig with fixed joints:
  * the ear joint sits on the head outline, the head pivots at the neck, the tail at its root.
  */
-export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, gaze, gazeDir = 1, pawUp = false, pawDir = gazeDir, bow = false, className }: Props) {
+export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, gaze, gazeDir = 1, pawUp = false, pawDir = gazeDir, bow = false, bark: barkCue, className }: Props) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const rootRef = useRef<SVGSVGElement>(null);
   const moodRef = useRef(mood);
@@ -53,6 +58,8 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
   const onBarkRef = useRef(onBark);
   const gazeRef = useRef({ gaze, gazeDir, pawUp, pawDir });
   const bowRef = useRef(bow);
+  const barkVisualRef = useRef<((short: boolean) => void) | null>(null);
+  const lastBarkId = useRef(barkCue?.id ?? 0);
   const applyBowRef = useRef<((on: boolean) => void) | null>(null);
   const applyGazeRef = useRef<((immediate: boolean) => void) | null>(null);
 
@@ -220,18 +227,25 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
       // Bark: open mouth, small head bounce, ear flick
       const hit = part("hit");
       const barkMouth = part("barkMouth");
-      const bark = () => {
-        const mouths = [faces.sadMouth, faces.happyMouth];
-        const prev = mouths.map((m) => Number(gsap.getProperty(m, "opacity")));
-        gsap.killTweensOf(barkMouth);
-        gsap.set(mouths, { opacity: 0 });
+      let closeMouth: gsap.core.Tween | null = null;
+      const barkVisual = (short: boolean) => {
+        // The resting mouth depends on the mood, so two quick barks can never leave him with no mouth.
+        const sad = moodRef.current === "worried" || moodRef.current === "thinking";
+        closeMouth?.kill();
+        gsap.set([faces.sadMouth, faces.happyMouth], { opacity: 0 });
         gsap.set(barkMouth, { opacity: 1 });
-        gsap.fromTo(pose, { headY: 0 }, { headY: -8, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" });
-        gsap.timeline().to(pose, { earKick: 60, duration: 0.2 }).to(pose, { earKick: 0, duration: 0.8, ease: "elastic.out(1,.35)", delay: 0.2 });
-        gsap.delayedCall(0.45, () => {
+        gsap.killTweensOf(pose, "headY,earKick");
+        gsap.fromTo(pose, { headY: 0 }, { headY: short ? -6 : -11, duration: short ? 0.08 : 0.12, yoyo: true, repeat: 1, ease: "power2.out" });
+        gsap.timeline().to(pose, { earKick: short ? 28 : 60, duration: 0.16 }).to(pose, { earKick: 0, duration: 0.7, ease: "elastic.out(1,.35)" });
+        closeMouth = gsap.delayedCall(short ? 0.28 : 0.45, () => {
           gsap.set(barkMouth, { opacity: 0 });
-          mouths.forEach((m, i) => gsap.set(m, { opacity: prev[i] }));
+          gsap.set(faces.sadMouth, { opacity: sad ? 1 : 0 });
+          gsap.set(faces.happyMouth, { opacity: sad ? 0 : 1 });
         });
+      };
+      barkVisualRef.current = barkVisual;
+      const bark = () => {
+        barkVisual(false);
         onBarkRef.current?.();
       };
       const onKey = (e: Event) => {
@@ -254,6 +268,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
       applyMoodRef.current = null;
       applyGazeRef.current = null;
       applyBowRef.current = null;
+      barkVisualRef.current = null;
       cleanups.forEach((fn) => fn());
       ctx.revert();
     };
@@ -274,6 +289,13 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
     bowRef.current = bow;
     applyBowRef.current?.(bow);
   }, [bow]);
+
+  // A bark on cue (not from a tap): open the mouth and jerk the head, without calling onBark.
+  useEffect(() => {
+    if (!barkCue || barkCue.id === lastBarkId.current) return;
+    lastBarkId.current = barkCue.id;
+    barkVisualRef.current?.(!!barkCue.short);
+  }, [barkCue]);
 
   const id = (name: string) => `${uid}${name}`;
   const ref = (name: string) => `url(#${id(name)})`;
