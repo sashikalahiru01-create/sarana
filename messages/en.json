@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "Sarana – help street animals",
-    "description": "See a dog or cat in trouble? Take a photo, add the location and post it. Volunteers nearby will help."
+    "description": "See a dog or cat in trouble? Take a photo, add the location and post it. Volunteers nearby will help.",
+    "storyTitle": "Brownie's story – Sarana"
   },
   "common": {
     "appName": "Sarana",
@@ -18,7 +19,8 @@
     "about": "About",
     "login": "Log in",
     "main": "Main navigation",
-    "mobile": "Mobile navigation"
+    "mobile": "Mobile navigation",
+    "story": "Brownie's story"
   },
   "language": {
     "label": "Language",
@@ -60,7 +62,8 @@
       "helped": "Animals now safe",
       "adopted": "Found a home",
       "volunteers": "Volunteers"
-    }
+    },
+    "watchStory": "Watch Brownie's story"
   },
   "story": {
     "hint": "Scroll down",

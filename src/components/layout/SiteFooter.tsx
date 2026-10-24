@@ -16,9 +16,16 @@ export async function SiteFooter() {
           </p>
         </div>
         <nav aria-label={t("common.appName")} className="flex flex-wrap gap-x-5">
-          {(["/map", "/volunteer", "/about"] as const).map((href) => (
+          {(
+            [
+              ["/story", "nav.story"],
+              ["/map", "nav.map"],
+              ["/volunteer", "nav.volunteer"],
+              ["/about", "nav.about"],
+            ] as const
+          ).map(([href, label]) => (
             <Link key={href} href={href} className="inline-flex min-h-11 items-center font-semibold hover:text-foreground">
-              {t(href === "/map" ? "nav.map" : href === "/volunteer" ? "nav.volunteer" : "nav.about")}
+              {t(label)}
             </Link>
           ))}
         </nav>

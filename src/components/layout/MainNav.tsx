@@ -6,6 +6,7 @@ import { useT } from "@/i18n/client";
 import type { MessageKey } from "@/i18n/translator";
 
 const links: { href: string; label: MessageKey }[] = [
+  { href: "/story", label: "nav.story" },
   { href: "/map", label: "nav.map" },
   { href: "/volunteer", label: "nav.volunteer" },
   { href: "/about", label: "nav.about" },

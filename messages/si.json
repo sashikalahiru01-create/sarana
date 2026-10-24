@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "Sarana – අසරණ සතුන්ට උදව්වක්",
-    "description": "පාරේ අමාරුවේ ඉන්න බල්ලෙක් හෝ පූසෙක් දැක්කද? Photo එකක් අරන්, location එක දාලා post කරන්න. ළඟපාත volunteers උදව් කරයි."
+    "description": "පාරේ අමාරුවේ ඉන්න බල්ලෙක් හෝ පූසෙක් දැක්කද? Photo එකක් අරන්, location එක දාලා post කරන්න. ළඟපාත volunteers උදව් කරයි.",
+    "storyTitle": "බ්‍රවුනි ගේ කතාව – Sarana"
   },
   "common": {
     "appName": "Sarana",
@@ -18,7 +19,8 @@
     "about": "අප ගැන",
     "login": "ඇතුල් වන්න",
     "main": "ප්‍රධාන මෙනුව",
-    "mobile": "ජංගම මෙනුව"
+    "mobile": "ජංගම මෙනුව",
+    "story": "බ්‍රවුනි ගේ කතාව"
   },
   "language": {
     "label": "භාෂාව",
@@ -60,7 +62,8 @@
       "helped": "දැන් ආරක්ෂිත සතුන්",
       "adopted": "ගෙදරක් ලැබුණු සතුන්",
       "volunteers": "Volunteers"
-    }
+    },
+    "watchStory": "බ්‍රවුනි ගේ කතාව බලන්න"
   },
   "story": {
     "hint": "පහළට scroll කරන්න",
