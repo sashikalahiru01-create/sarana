@@ -26,7 +26,7 @@ export function MainNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-11 items-center rounded-full px-4 font-semibold transition duration-200 ${
+            className={`flex min-h-11 items-center whitespace-nowrap rounded-full px-4 font-semibold transition duration-200 ${
               active
                 ? "bg-coral/12 text-coral-ink dark:text-brownie"
                 : "text-foreground/80 hover:bg-foreground/6 hover:text-foreground"

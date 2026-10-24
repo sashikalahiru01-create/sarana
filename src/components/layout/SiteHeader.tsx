@@ -20,11 +20,11 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Link href="/login" className="btn btn-ghost hidden !min-h-11 !px-4 md:inline-flex">
+          <Link href="/login" aria-label={t("nav.login")} className="btn btn-ghost hidden !min-h-11 !px-3 whitespace-nowrap md:inline-flex lg:!px-4">
             <LogIn size={18} aria-hidden="true" />
-            {t("nav.login")}
+            <span className="hidden lg:inline">{t("nav.login")}</span>
           </Link>
-          <Link href="/report" className="btn btn-primary hidden !min-h-11 !px-4 md:inline-flex">
+          <Link href="/report" className="btn btn-primary hidden !min-h-11 !px-4 whitespace-nowrap md:inline-flex">
             <Camera size={18} aria-hidden="true" />
             {t("home.reportCta")}
           </Link>

@@ -81,6 +81,11 @@
         "dawn": "Early morning in Sri Lanka",
         "day": "Daytime in Sri Lanka",
         "dusk": "Evening in Sri Lanka"
+      },
+      "ask": "Will you help them?",
+      "window": {
+        "waiting": "Outside the window, animals wait in the rain",
+        "safe": "Outside the window, a calm sunny street"
       }
     }
   },

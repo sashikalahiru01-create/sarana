@@ -17,6 +17,15 @@ type Props = {
   /** Eyes follow the pointer, tapping or pressing Enter makes him bark. */
   interactive?: boolean;
   onBark?: () => void;
+  /**
+   * Where he looks: "side" turns his head and eyes toward gazeDir (e.g. out of a window),
+   * "front" faces the viewer with a lifted ear. Leave undefined for the mood's default pose.
+   */
+  gaze?: "front" | "side";
+  /** Side to look at when gaze is "side": 1 = the viewer's right, -1 = the left. */
+  gazeDir?: 1 | -1;
+  /** Lift the paw on the gaze side, as if pointing at something. */
+  pawUp?: boolean;
   className?: string;
 };
 
@@ -32,12 +41,14 @@ const POSES: Record<BrownieMood, { ear: number; head: number; tail: number }> = 
  * Brownie, the Sarana mascot. A tan street dog built as an SVG rig with fixed joints:
  * the ear joint sits on the head outline, the head pivots at the neck, the tail at its root.
  */
-export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, className }: Props) {
+export function Brownie({ mood, label = "Brownie", collar = false, dusty = false, interactive = false, onBark, gaze, gazeDir = 1, pawUp = false, className }: Props) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
   const rootRef = useRef<SVGSVGElement>(null);
   const moodRef = useRef(mood);
   const applyMoodRef = useRef<((m: BrownieMood, immediate: boolean) => void) | null>(null);
   const onBarkRef = useRef(onBark);
+  const gazeRef = useRef({ gaze, gazeDir, pawUp });
+  const applyGazeRef = useRef<((immediate: boolean) => void) | null>(null);
 
   useEffect(() => {
     onBarkRef.current = onBark;
@@ -52,17 +63,19 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
     let disposed = false;
 
     const ctx = gsap.context(() => {
-      const pose = { ear: -105, earKick: 0, head: -6, headY: 0, tail: 62, wag: 0, breathe: 1 };
+      const pose = { ear: -105, earKick: 0, head: -6, headX: 0, headY: 0, tail: 62, wag: 0, breathe: 1, paw: 0 };
       const earEl = part("earL");
       const headEl = part("head");
       const tailEl = part("tail");
       const bodyEl = part("body");
+      const pawEl = part("pawR");
 
       const applyPose = () => {
         const b = pose.breathe;
         const lift = (b - 1) * 122;
         bodyEl.setAttribute("transform", `translate(0 ${350 * (1 - b)}) scale(1 ${b})`);
-        headEl.setAttribute("transform", `translate(0 ${pose.headY - lift}) rotate(${pose.head} 200 240)`);
+        headEl.setAttribute("transform", `translate(${pose.headX} ${pose.headY - lift}) rotate(${pose.head} 200 240)`);
+        pawEl.setAttribute("transform", `rotate(${pose.paw} 235 302)`);
         earEl.setAttribute("transform", `rotate(${pose.ear + pose.earKick} 152 112)`);
         tailEl.setAttribute("transform", `translate(0 ${-(b - 1) * 50}) rotate(${pose.tail + pose.wag} 282 300)`);
       };
@@ -73,7 +86,14 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
       const wag = gsap.fromTo(pose, { wag: 0 }, { wag: -34, duration: 0.2, repeat: -1, yoyo: true, ease: "sine.inOut", paused: true });
       const zzz = part("zzz");
       const pupils = [part("pupilL"), part("pupilR")];
-      const GAZE = { x: 6, y: -7 };
+      const pupilTo = pupils.map((el) => ({
+        x: gsap.quickTo(el, "x", { duration: 0.4, ease: "power3" }),
+        y: gsap.quickTo(el, "y", { duration: 0.4, ease: "power3" }),
+      }));
+      const lookAt = (x: number, y: number, immediate: boolean) => {
+        if (immediate) gsap.set(pupils, { x, y });
+        else pupilTo.forEach((p) => (p.x(x), p.y(y)));
+      };
 
       // Ambient life (off with reduced motion)
       if (!reduce) {
@@ -94,14 +114,6 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         gsap.delayedCall(2, blink);
         gsap.to(part("tear"), { y: 22, opacity: 0, duration: 1.8, repeat: -1, ease: "power1.in", repeatDelay: 1.2 });
         gsap.to(zzz, { y: -10, duration: 1.8, repeat: -1, yoyo: true, ease: "sine.inOut" });
-        const glance = () => {
-          if (disposed) return;
-          if (moodRef.current === "thinking") {
-            gsap.timeline().to(pupils, { x: -2, y: 2, duration: 0.3 }).to(pupils, { ...GAZE, duration: 0.5, delay: 1.1 });
-          }
-          gsap.delayedCall(5 + Math.random() * 3, glance);
-        };
-        gsap.delayedCall(4, glance);
       }
 
       // Mood changes move the joints and swap the face
@@ -125,31 +137,51 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
         gsap.to(faces.eyes, { opacity: m === "sleeping" ? 0 : 1, duration: d / 2 });
         gsap.to(faces.closedEyes, { opacity: m === "sleeping" ? 1 : 0, duration: d / 2 });
         gsap.to(faces.zzz, { opacity: m === "sleeping" ? 1 : 0, duration: d / 2 });
-        gsap.to(pupils, m === "thinking" ? { ...GAZE, duration: d } : { x: 0, y: 0, duration: d });
+        lookAt(0, 0, immediate);
         if (m === "happy" && !reduce) wag.play();
         else wag.pause();
         if (m !== "happy") gsap.to(pose, { wag: 0, duration: 0.3 });
       };
+
+      // Gaze: turn the head and eyes toward the side, or face the viewer. Runs after the mood so it wins.
+      applyGazeRef.current = (immediate) => {
+        const { gaze: g, gazeDir: dir, pawUp: up } = gazeRef.current;
+        const base = POSES[moodRef.current];
+        const d = immediate ? 0 : 0.6;
+        if (g) {
+          const side = g === "side";
+          gsap.to(pose, {
+            headX: side ? 12 * dir : 0,
+            head: side ? dir * (Math.abs(base.head) + 3) : dir * -3,
+            ear: side ? base.ear : Math.min(0, base.ear + 24), // facing you: one ear lifts
+            duration: d,
+            ease: "power2.inOut",
+            overwrite: "auto",
+          });
+          lookAt(side ? 7 * dir : 0, side ? -1 : 1, immediate);
+        }
+        gsap.to(pose, { paw: up ? -54 * dir : 0, duration: d * 0.9, ease: up ? "back.out(2.2)" : "power2.out", overwrite: "auto" });
+      };
       applyMoodRef.current(moodRef.current, true);
+      applyGazeRef.current(true);
 
       if (!interactive) return;
 
-      // Eyes follow the pointer (or touch point)
-      const movers = (["L", "R"] as const).map((side) => ({
+      // Eyes follow the pointer (or touch point), except while he is looking out to the side
+      const movers = (["L", "R"] as const).map((side, i) => ({
         socket: part(`socket${side}`),
-        x: gsap.quickTo(part(`pupil${side}`), "x", { duration: 0.35, ease: "power3" }),
-        y: gsap.quickTo(part(`pupil${side}`), "y", { duration: 0.35, ease: "power3" }),
+        to: pupilTo[i],
       }));
       const look = (cx: number, cy: number) => {
-        if (moodRef.current === "sleeping" || moodRef.current === "thinking") return;
+        if (moodRef.current === "sleeping" || gazeRef.current.gaze === "side") return;
         movers.forEach((m) => {
           const r = m.socket.getBoundingClientRect();
           const ex = r.left + r.width / 2;
           const ey = r.top + r.height / 2;
           const a = Math.atan2(cy - ey, cx - ex);
           const dist = Math.min(1, Math.hypot(cx - ex, cy - ey) / 220);
-          m.x(Math.cos(a) * 5 * dist);
-          m.y(Math.sin(a) * 4.5 * dist);
+          m.to.x(Math.cos(a) * 5 * dist);
+          m.to.y(Math.sin(a) * 4.5 * dist);
         });
       };
       const onPointer = (e: PointerEvent) => look(e.clientX, e.clientY);
@@ -199,6 +231,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
     return () => {
       disposed = true;
       applyMoodRef.current = null;
+      applyGazeRef.current = null;
       cleanups.forEach((fn) => fn());
       ctx.revert();
     };
@@ -207,7 +240,13 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
   useEffect(() => {
     moodRef.current = mood;
     applyMoodRef.current?.(mood, false);
+    applyGazeRef.current?.(false);
   }, [mood]);
+
+  useEffect(() => {
+    gazeRef.current = { gaze, gazeDir, pawUp };
+    applyGazeRef.current?.(false);
+  }, [gaze, gazeDir, pawUp]);
 
   const id = (name: string) => `${uid}${name}`;
   const ref = (name: string) => `url(#${id(name)})`;
@@ -243,10 +282,13 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
           <ellipse cx="200" cy="290" rx="100" ry="64" fill={ref("furBody")} />
           <ellipse cx="200" cy="306" rx="54" ry="44" fill={ref("muzzle")} />
           <rect x="146" y="298" width="38" height="52" rx="19" fill={ref("furBody")} />
-          <rect x="216" y="298" width="38" height="52" rx="19" fill={ref("furBody")} />
           <ellipse cx="165" cy="346" rx="22" ry="10" fill="#F6DDB6" />
-          <ellipse cx="235" cy="346" rx="22" ry="10" fill="#F6DDB6" />
-          <path d="M156 346v-6M164 347v-7M174 346v-6M226 346v-6M234 347v-7M244 346v-6" stroke="#C9A27A" strokeWidth="2" strokeLinecap="round" />
+          <path d="M156 346v-6M164 347v-7M174 346v-6" stroke="#C9A27A" strokeWidth="2" strokeLinecap="round" />
+          <g data-part="pawR">
+            <rect x="216" y="298" width="38" height="52" rx="19" fill={ref("furBody")} />
+            <ellipse cx="235" cy="346" rx="22" ry="10" fill="#F6DDB6" />
+            <path d="M226 346v-6M234 347v-7M244 346v-6" stroke="#C9A27A" strokeWidth="2" strokeLinecap="round" />
+          </g>
           <g stroke="#B07036" strokeWidth="2.4" strokeLinecap="round" fill="none" opacity=".45">
             <path d="M118 270q6 -6 12 -4" /><path d="M128 300q6 -6 12 -4" /><path d="M262 262q6 -6 12 -2" /><path d="M270 290q6 -6 12 -2" />
           </g>

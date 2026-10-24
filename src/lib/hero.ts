@@ -12,16 +12,31 @@ export function getDayPeriod(now = new Date()): DayPeriod {
   return "night";
 }
 
-/** Urgent animals nobody has offered to help yet. Null if the database cannot be reached. */
-export async function getWaitingCount(): Promise<number | null> {
+/** What a waiting animal looks like in the window. Young ones are drawn as two puppies or two kittens. */
+export type StreetAnimal = "dog" | "cat" | "pups" | "kittens";
+
+export type Waiting = { count: number; animals: StreetAnimal[] };
+
+/**
+ * Urgent animals nobody has offered to help yet: how many, and the kind of the latest four
+ * (those are the ones shown in the window). Null if the database cannot be reached.
+ */
+export async function getWaiting(): Promise<Waiting | null> {
   try {
     const supabase = await createClient();
-    const { count, error } = await supabase
+    const { data, count, error } = await supabase
       .from("pets")
-      .select("id", { count: "exact", head: true })
+      .select("animal_type, conditions", { count: "exact" })
       .eq("is_urgent", true)
-      .eq("status", "reported");
-    return error ? null : (count ?? 0);
+      .eq("status", "reported")
+      .order("created_at", { ascending: false })
+      .limit(4);
+    if (error) return null;
+    const animals = (data ?? []).map((pet): StreetAnimal => {
+      const young = (pet.conditions as string[] | null)?.includes("young");
+      return pet.animal_type === "cat" ? (young ? "kittens" : "cat") : young ? "pups" : "dog";
+    });
+    return { count: count ?? animals.length, animals };
   } catch {
     return null;
   }
