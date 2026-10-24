@@ -47,19 +47,6 @@ as $$
   );
 $$;
 
-create or replace function public.is_volunteer()
-returns boolean
-language sql
-stable
-security definer
-set search_path = ''
-as $$
-  select exists (
-    select 1 from public.volunteers
-    where user_id = (select auth.uid()) and is_active
-  );
-$$;
-
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -219,6 +206,20 @@ drop trigger if exists volunteers_set_updated_at on public.volunteers;
 create trigger volunteers_set_updated_at
   before update on public.volunteers
   for each row execute function public.set_updated_at();
+
+-- Defined after the volunteers table, because SQL functions are checked when created.
+create or replace function public.is_volunteer()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $
+  select exists (
+    select 1 from public.volunteers
+    where user_id = (select auth.uid()) and is_active
+  );
+$;
 
 -- ---------------------------------------------------------------------------
 -- Public numbers for the home page (counts only, no private data)
