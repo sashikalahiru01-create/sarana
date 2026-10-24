@@ -295,5 +295,52 @@
       "q": "What if the animal is injured?",
       "a": "Keep a calm distance, take a clear photo and report it. Do not force food on an injured animal. Volunteers will take it from there."
     }
+  },
+  "map": {
+    "title": "Animals near you",
+    "subtitle": "Tap a pin to see who needs help.",
+    "mapLabel": "Map of animals that need help",
+    "filters": {
+      "label": "Filter animals",
+      "all": "All",
+      "dogs": "Dogs",
+      "cats": "Cats",
+      "urgent": "Urgent",
+      "needsHome": "Needs a home"
+    },
+    "view": {
+      "label": "Show",
+      "map": "Map",
+      "list": "List"
+    },
+    "sniff": "Find animals near me",
+    "sniffing": "Brownie is sniffing…",
+    "sniffFailed": "We couldn't get your location. You can still explore the map.",
+    "count": "{n} shown",
+    "away": "{km} km away",
+    "here": "You are here",
+    "ago": {
+      "now": "Just now",
+      "minutes": "{n} min ago",
+      "hours": "{n} h ago",
+      "days": "{n} d ago"
+    },
+    "empty": {
+      "title": "Everyone near you is safe",
+      "body": "No animals match this filter right now. Brownie is having a nap.",
+      "reset": "Show all animals"
+    },
+    "error": {
+      "title": "Brownie couldn't fetch the animals",
+      "body": "Check your internet and try again.",
+      "retry": "Try again"
+    },
+    "card": {
+      "open": "Details",
+      "noPhoto": "No photo yet",
+      "photoAlt": "Photo of a {type}",
+      "showOnMap": "Show on map",
+      "close": "Close"
+    }
   }
 }
