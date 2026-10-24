@@ -223,6 +223,12 @@ export function HeroScene({ period, waiting }: Props) {
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[12%] shadow-[inset_0_14px_20px_-12px_rgb(0_0_0/0.35)]" style={{ background: room.floor }} />
       <div aria-hidden="true" className="absolute -left-[3%] bottom-[9.5%] h-[6.5%] w-[70%] rounded-full bg-linear-to-b from-coral to-[#c4401b] shadow-[0_8px_14px_-6px_rgb(0_0_0/0.5)]" />
 
+      {/* The guide takes this Brownie down the page when you scroll; it marks him with data-away, which
+          hides him and shows the note on the empty seat. The note must stay right after him. */}
+      <div
+        data-hero-brownie
+        className="absolute -left-[1%] bottom-[13%] w-[54%] animate-[pop-in_0.7s_cubic-bezier(0.34,1.4,0.64,1)_0.1s_backwards]"
+      >
       <Brownie
         mood={mood}
         gaze={baseMood === "sleeping" && !hovering ? undefined : lookingAtYou ? "front" : "side"}
@@ -235,8 +241,13 @@ export function HeroScene({ period, waiting }: Props) {
         collar
         label={t("home.hero.brownie")}
         onBark={onBark}
-        className="absolute -left-[1%] bottom-[13%] w-[54%] animate-[pop-in_0.7s_cubic-bezier(0.34,1.4,0.64,1)_0.1s_backwards] overflow-visible"
+        className="block h-auto w-full overflow-visible"
       />
+      </div>
+      <p className="hero-away-note glass absolute bottom-[20%] left-[4%] flex max-w-[46%] items-center gap-2 rounded-2xl px-3 py-2 text-[12px] font-bold leading-snug text-foreground sm:text-[13px]">
+        <PawPrint size={16} className="shrink-0 text-coral" aria-hidden="true" />
+        {t("home.hero.away")}
+      </p>
 
       {/* what Brownie says when he turns to you */}
       <p

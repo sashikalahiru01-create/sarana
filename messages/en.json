@@ -104,7 +104,8 @@
           "title": "Volunteers help",
           "body": "Food, vet care, a lift"
         }
-      }
+      },
+      "away": "Brownie went to show you the way"
     }
   },
   "story": {
@@ -236,7 +237,9 @@
     "stats": "Look what we did together!",
     "help": "Pick what you can do",
     "faq": "Ask me anything",
-    "door": "Ready? I'll be waiting!"
+    "door": "Ready? I'll be waiting!",
+    "follow": "Follow me!",
+    "partners": "Hang your tag with ours!"
   },
   "ways": {
     "eyebrow": "Ways to help",

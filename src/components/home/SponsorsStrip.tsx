@@ -77,7 +77,7 @@ export async function SponsorsStrip() {
               <PawPrint size={14} aria-hidden="true" />
               {t("sponsors.eyebrow")}
             </p>
-            <h2 className="mt-4 text-[clamp(24px,3vw,32px)] leading-[1.2]">{hasSponsors ? t("sponsors.title") : t("sponsors.emptyTitle")}</h2>
+            <h2 data-guide="point" data-guide-say={t("guide.partners")} className="mt-4 text-[clamp(24px,3vw,32px)] leading-[1.2]">{hasSponsors ? t("sponsors.title") : t("sponsors.emptyTitle")}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-[#6b5a3a] dark:text-cream/70">{t("sponsors.body")}</p>
             <Link href="/about" className="btn btn-primary mt-5 !min-h-12 !px-5">
               {t("sponsors.cta")}
