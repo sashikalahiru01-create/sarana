@@ -227,7 +227,9 @@
     "eyebrow": "Our partners",
     "title": "Partners who help us help them",
     "slot": "Your logo here",
-    "cta": "Become a partner"
+    "cta": "Become a partner",
+    "emptyTitle": "Be our first partner",
+    "body": "Vets, shops, shelters and kind businesses: hang your tag next to ours."
   },
   "guide": {
     "how": "Just three taps!",
