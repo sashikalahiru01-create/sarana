@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "title": "Sarana – help street animals",
+    "description": "See a dog or cat in trouble? Take a photo, add the location and post it. Volunteers nearby will help."
+  },
+  "common": {
+    "appName": "Sarana",
+    "tagline": "Helping street animals",
+    "skipToContent": "Skip to content",
+    "loading": "Loading…"
+  },
+  "nav": {
+    "home": "Home",
+    "map": "Map",
+    "report": "Report",
+    "volunteer": "Volunteer",
+    "profile": "Profile",
+    "about": "About",
+    "login": "Log in",
+    "main": "Main navigation",
+    "mobile": "Mobile navigation"
+  },
+  "language": {
+    "label": "Language",
+    "si": "සිංහල",
+    "en": "English"
+  },
+  "status": {
+    "reported": "Reported",
+    "help_on_the_way": "Help on the way",
+    "safe": "Safe",
+    "adopted": "Adopted",
+    "urgent": "Urgent"
+  },
+  "home": {
+    "title": "The next Brownie might be on your street.",
+    "subtitle": "All it takes is a photo and a location. The community does the rest.",
+    "reportCta": "Report a pet"
+  }
+}

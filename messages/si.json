@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "title": "Sarana – අසරණ සතුන්ට උදව්වක්",
+    "description": "පාරේ අමාරුවේ ඉන්න බල්ලෙක් හෝ පූසෙක් දැක්කද? Photo එකක් අරන්, location එක දාලා post කරන්න. ළඟපාත volunteers උදව් කරයි."
+  },
+  "common": {
+    "appName": "Sarana",
+    "tagline": "අසරණ සතුන්ට උදව්වක්",
+    "skipToContent": "ප්‍රධාන අන්තර්ගතයට පනින්න",
+    "loading": "Load වෙමින්…"
+  },
+  "nav": {
+    "home": "මුල් පිටුව",
+    "map": "සිතියම",
+    "report": "Report",
+    "volunteer": "Volunteer",
+    "profile": "ගිණුම",
+    "about": "අප ගැන",
+    "login": "ඇතුල් වන්න",
+    "main": "ප්‍රධාන මෙනුව",
+    "mobile": "ජංගම මෙනුව"
+  },
+  "language": {
+    "label": "භාෂාව",
+    "si": "සිංහල",
+    "en": "English"
+  },
+  "status": {
+    "reported": "Report කළා",
+    "help_on_the_way": "උදව් එනවා",
+    "safe": "ආරක්ෂිතයි",
+    "adopted": "ගෙදරක් ලැබුණා",
+    "urgent": "හදිසියි"
+  },
+  "home": {
+    "title": "ඊළඟ බ්‍රවුනි ඔයාගේ පාරේ ඉන්නවා වෙන්න පුළුවන්.",
+    "subtitle": "Photo එකක් සහ location එකක් විතරයි ඕන වෙන්නේ. ඉතිරි ටික community එක බලාගන්නවා.",
+    "reportCta": "සතෙක් report කරන්න"
+  }
+}

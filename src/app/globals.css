@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* Brand palette (CLAUDE.md "Design system"). Use these for status and brand moments. */
+@theme {
+  --color-coral: #e4572e;
+  --color-midnight: #182033;
+  --color-brownie: #d99a57;
+  --color-cream: #fbebd6;
+  --color-blue: #2e6bd8;
+  --color-green: #1f8a70;
+  --color-gold: #f2b544;
+  --color-night: #0f1630;
+
+  --radius-card: 20px;
+  --radius-button: 16px;
+
+  /* Soft warm shadows */
+  --shadow-soft: 0 10px 30px -14px rgb(140 80 30 / 0.28);
+  --shadow-pop: 0 20px 44px -18px rgb(140 80 30 / 0.4);
+  --shadow-coral: 0 14px 28px -14px rgb(228 87 46 / 0.9);
+
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* Semantic colours: these swap in dark mode, so components rarely need `dark:`. */
+:root {
+  color-scheme: light;
+  --background: #fffaf3;
+  --surface: #ffffff;
+  --foreground: #182033;
+  --muted: #55607a;
+  --line: #ead7b9;
+
+  /* Body font follows the language: Sinhala text uses Noto Sans Sinhala, whose Latin letters are spaced too wide for English. */
+  --font-body: var(--font-sinhala), var(--font-bricolage), var(--font-tamil), system-ui, sans-serif;
+}
+
+:root:lang(en) {
+  --font-body: var(--font-bricolage), var(--font-sinhala), var(--font-tamil), system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0f1630;
+    --surface: #182033;
+    --foreground: #f6efe4;
+    --muted: #aab4cd;
+    --line: #2a3459;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+
+  --font-heading: var(--font-bricolage), var(--font-sinhala), var(--font-tamil), system-ui, sans-serif;
+  --font-sans: var(--font-body);
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  /* Sinhala needs more line height than Latin to keep its tall marks from clipping. */
+  line-height: 1.65;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-blue);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .card {
+    @apply rounded-card bg-surface shadow-soft;
+  }
+
+  /* Buttons: 16px radius, at least 44px tall, 0.2s hover/press. */
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-button px-6 text-base font-bold transition duration-200 select-none;
+    @apply hover:-translate-y-0.5 active:scale-[0.97];
+    @apply disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-coral text-white shadow-coral;
+  }
+  .btn-ghost {
+    @apply border-[1.5px] border-line bg-transparent text-foreground;
+  }
+
+  /* Status chips use the brand status colours. */
+  .chip {
+    @apply inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 text-sm font-bold text-white;
+  }
+}
+
+/* Safe-area padding helpers for the fixed mobile bar. */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
