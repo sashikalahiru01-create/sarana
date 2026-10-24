@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# stray Turbopack loader output seen once with turbopack.root set
+/sarana-starter-kit/
