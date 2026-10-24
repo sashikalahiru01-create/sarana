@@ -3,7 +3,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
-      className={`grid size-9 place-items-center rounded-[11px] bg-coral ${className}`}
+      className={`grid size-9 place-items-center rounded-[11px] bg-linear-to-br from-[#f47a50] to-coral shadow-[0_8px_16px_-8px_rgb(228_87_46/0.9),inset_0_1px_0_rgb(255_255_255/0.3)] ${className}`}
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
         <circle cx="6" cy="9" r="2.2" />

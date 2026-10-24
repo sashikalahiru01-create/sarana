@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
     <div
       role="group"
       aria-label={t("language.label")}
-      className="flex rounded-button border-[1.5px] border-line p-0.5"
+      className="flex rounded-full border border-(--glass-line) bg-surface/60 p-0.5"
     >
       {locales.map((locale) => {
         const active = locale === current;
@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
             onClick={() => {
               if (!active) startTransition(() => setLocale(locale));
             }}
-            className={`min-h-11 min-w-11 rounded-[13px] px-3 text-sm font-bold transition duration-200 ${
+            className={`min-h-11 min-w-11 rounded-full px-3.5 text-sm font-bold transition duration-200 ${
               active ? "bg-midnight text-white dark:bg-cream dark:text-midnight" : "text-muted hover:text-foreground"
             }`}
           >

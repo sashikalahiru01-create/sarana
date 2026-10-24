@@ -2,13 +2,13 @@
 
 import { useT } from "@/i18n/client";
 
-export function ReplayButton() {
+export function ReplayButton({ className = "btn btn-ghost" }: { className?: string }) {
   const t = useT();
 
   return (
     <button
       type="button"
-      className="btn btn-ghost"
+      className={className}
       onClick={() => {
         const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
         scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });

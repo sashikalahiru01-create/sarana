@@ -17,8 +17,8 @@
   --radius-button: 16px;
 
   /* Soft warm shadows */
-  --shadow-soft: 0 10px 30px -14px rgb(140 80 30 / 0.28);
-  --shadow-pop: 0 20px 44px -18px rgb(140 80 30 / 0.4);
+  --shadow-soft: 0 1px 2px rgb(140 80 30 / 0.06), 0 12px 32px -16px rgb(140 80 30 / 0.3);
+  --shadow-pop: 0 2px 4px rgb(140 80 30 / 0.08), 0 24px 48px -20px rgb(140 80 30 / 0.45);
   --shadow-coral: 0 14px 28px -14px rgb(228 87 46 / 0.9);
 
   --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
@@ -32,6 +32,17 @@
   --foreground: #182033;
   --muted: #55607a;
   --line: #ead7b9;
+  --eyebrow: #c4401b;
+
+  /* Glass surfaces (header, bottom bar, floating panels) */
+  --glass: rgb(255 252 247 / 0.72);
+  --glass-line: rgb(234 215 185 / 0.75);
+
+  /* The page glows like early morning light: gold from the left, coral from the right. */
+  --backdrop:
+    radial-gradient(60rem 28rem at 6% -10%, rgb(242 181 68 / 0.24), transparent 60%),
+    radial-gradient(50rem 26rem at 100% -4%, rgb(228 87 46 / 0.11), transparent 60%),
+    radial-gradient(44rem 24rem at 50% 108%, rgb(217 154 87 / 0.14), transparent 60%);
 
   /* Body font follows the language: Sinhala text uses Noto Sans Sinhala, whose Latin letters are spaced too wide for English. */
   --font-body: var(--font-sinhala), var(--font-bricolage), var(--font-tamil), system-ui, sans-serif;
@@ -49,6 +60,14 @@
     --foreground: #f6efe4;
     --muted: #aab4cd;
     --line: #2a3459;
+    --eyebrow: #d99a57;
+    --glass: rgb(24 32 51 / 0.66);
+    --glass-line: rgb(255 255 255 / 0.1);
+    /* A rainy night: cold blue light with a warm street-lamp glow. */
+    --backdrop:
+      radial-gradient(60rem 28rem at 88% -10%, rgb(46 107 216 / 0.26), transparent 60%),
+      radial-gradient(46rem 24rem at 0% 0%, rgb(228 87 46 / 0.12), transparent 60%),
+      radial-gradient(44rem 24rem at 50% 108%, rgb(242 181 68 / 0.07), transparent 60%);
   }
 }
 
@@ -68,6 +87,8 @@ html {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body);
@@ -76,12 +97,22 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--backdrop);
+}
+
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
@@ -92,8 +123,8 @@ h3 {
 
 /* Scroll story (home page). Scene colours are the story, so they do not change in dark mode. */
 :root {
-  /* Stage fills the screen between the sticky header (4rem) and, on phones, the bottom bar (3.6rem). */
-  --story-h: calc(100svh - 4rem - 3.6rem - env(safe-area-inset-bottom, 0px));
+  /* Stage fills the screen between the sticky header (4rem) and, on phones, the floating bottom bar (4.75rem). */
+  --story-h: calc(100svh - 4rem - 4.75rem - env(safe-area-inset-bottom, 0px));
 }
 @media (min-width: 768px) {
   :root {
@@ -141,7 +172,21 @@ h3 {
 
 @layer components {
   .card {
-    @apply rounded-card bg-surface shadow-soft;
+    @apply rounded-card border border-line/70 bg-surface shadow-soft;
+  }
+
+  /* Frosted glass for things that float above the page. */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-line);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+  }
+
+  /* Small caps label above a heading. */
+  .eyebrow {
+    @apply font-heading text-xs font-bold uppercase tracking-[0.14em];
+    color: var(--eyebrow);
   }
 
   /* Buttons: 16px radius, at least 44px tall, 0.2s hover/press. */
@@ -151,15 +196,31 @@ h3 {
     @apply disabled:pointer-events-none disabled:opacity-60;
   }
   .btn-primary {
-    @apply bg-coral text-white shadow-coral;
+    @apply text-white;
+    background-image: linear-gradient(180deg, #f06d43 0%, #e4572e 55%, #d94c24 100%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.28),
+      var(--shadow-coral);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.06);
   }
   .btn-ghost {
-    @apply border-[1.5px] border-line bg-transparent text-foreground;
+    @apply border-[1.5px] border-line bg-surface/60 text-foreground hover:bg-surface;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
 
   /* Status chips use the brand status colours. */
   .chip {
     @apply inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 text-sm font-bold text-white;
+  }
+}
+
+/* Page transition: a quick fade (0.4s). Opacity only, so the pinned scroll story measures its position correctly. */
+@keyframes page-in {
+  from {
+    opacity: 0;
   }
 }
 

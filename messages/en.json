@@ -36,7 +36,31 @@
     "title": "The next Brownie might be on your street.",
     "subtitle": "All it takes is a photo and a location. The community does the rest.",
     "reportCta": "Report a pet",
-    "replay": "Watch the story again"
+    "replay": "Watch the story again",
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three taps from a street corner to a helping hand.",
+      "s1": {
+        "title": "Take a photo",
+        "body": "Press the camera button and snap the animal. No app to download."
+      },
+      "s2": {
+        "title": "Drop a pin",
+        "body": "Use your GPS or tap the map to mark exactly where the animal is."
+      },
+      "s3": {
+        "title": "Help arrives",
+        "body": "Volunteers nearby see it at once: food, vet care, a lift, or a foster home."
+      }
+    },
+    "stats": {
+      "eyebrow": "Right now",
+      "title": "What the community has done so far",
+      "reported": "Animals reported",
+      "helped": "Animals now safe",
+      "adopted": "Found a home",
+      "volunteers": "Volunteers"
+    }
   },
   "story": {
     "hint": "Scroll down",

@@ -25,8 +25,10 @@ export function MainNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-h-11 items-center rounded-button px-4 font-semibold transition duration-200 hover:bg-cream/60 dark:hover:bg-white/10 ${
-              active ? "text-coral" : "text-foreground"
+            className={`flex min-h-11 items-center rounded-full px-4 font-semibold transition duration-200 ${
+              active
+                ? "bg-coral/12 text-coral-ink dark:text-brownie"
+                : "text-foreground/80 hover:bg-foreground/6 hover:text-foreground"
             }`}
           >
             {t(label)}

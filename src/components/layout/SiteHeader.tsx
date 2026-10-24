@@ -9,7 +9,7 @@ export async function SiteHeader() {
   const { t } = await getTranslator();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-background/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-(--glass-line) bg-(--glass) backdrop-blur-xl backdrop-saturate-150">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
         <Link href="/" className="flex min-h-11 items-center gap-2.5 font-heading text-xl font-extrabold tracking-tight">
           <BrandMark />
@@ -20,10 +20,7 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Link
-            href="/login"
-            className="btn btn-ghost hidden !min-h-11 !px-4 md:inline-flex"
-          >
+          <Link href="/login" className="btn btn-ghost hidden !min-h-11 !px-4 md:inline-flex">
             <LogIn size={18} aria-hidden="true" />
             {t("nav.login")}
           </Link>
