@@ -75,5 +75,83 @@
       "body": "ඒ වැහි රෑ නැවතුණු කෙනාම අන්තිමට ඌට ගෙදරක් දුන්නා. දැන් කන් දෙකම උඩට.",
       "dot": "ගෙදර"
     }
+  },
+  "report": {
+    "title": "සතෙක් report කරන්න",
+    "subtitle": "විනාඩියක් විතර යනවා. Login වෙන්න ඕන නැහැ.",
+    "stepsLabel": "Report කරන පියවර",
+    "steps": {
+      "photo": "Photo",
+      "location": "Location",
+      "details": "විස්තර"
+    },
+    "photo": {
+      "title": "Photo එකක් ගන්න",
+      "hint": "පැහැදිලි photo එකක් තියෙනවා නම් volunteers ලාට සතා හොයාගන්න ලේසියි.",
+      "take": "Photo එකක් ගන්න",
+      "choose": "Gallery එකෙන් තෝරන්න",
+      "addMore": "තව photo එකක් දාන්න",
+      "remove": "Photo {n} අයින් කරන්න",
+      "alt": "සතාගේ photo {n}",
+      "limit": "Photo {max}ක් දක්වා දාන්න පුළුවන්.",
+      "working": "Photo එක පොඩි කරනවා…",
+      "readError": "ඒ photo එක කියවන්න බැරි වුණා. වෙන එකක් try කරන්න."
+    },
+    "location": {
+      "title": "සතා ඉන්නේ කොහෙද?",
+      "hint": "Pin එක හරියටම ඉන්න තැනට ඇදගෙන යන්න, නැත්නම් map එක ඔබන්න.",
+      "useMine": "මගේ location එක ගන්න",
+      "locating": "ඔයාව හොයනවා…",
+      "failed": "ඔයාගේ location එක ගන්න බැරි වුණා. Map එක ඔබලා pin එක දාන්න.",
+      "mapLabel": "සතා ඉන්න තැන තෝරන්න map එක",
+      "label": "ළඟ තියෙන දෙයක් හෝ පාරේ නම (අවශ්‍ය නම්)",
+      "labelPlaceholder": "උදා: බස් නැවතුම ළඟ",
+      "placed": "Pin එක දැම්මා"
+    },
+    "details": {
+      "title": "සතා ගැන කියන්න",
+      "type": "මොන සතාද?",
+      "dog": "බල්ලා",
+      "cat": "පූසා",
+      "conditions": "ඔයා දකින්නේ මොනවාද? අදාළ ඔක්කොම තෝරන්න.",
+      "urgent": "Volunteers ලාට මුලින්ම පේන්න මේක හදිසි ලෙස සලකුණු කරනවා.",
+      "noteLabel": "තව කියන්න දෙයක් තියෙනවද? (අවශ්‍ය නම්)",
+      "notePlaceholder": "උදා: කොර ගහනවා, කොළ පාට පටියක් තියෙනවා, පන්සල ළඟ ඉන්නේ",
+      "contactLabel": "ඔයාගේ phone number එක හෝ email (අවශ්‍ය නම්)",
+      "contactHint": "මේක පේන්නේ site admins ලාට විතරයි."
+    },
+    "condition": {
+      "injured": "තුවාල තියෙනවා",
+      "sick": "අසනීපයි",
+      "hungry": "බඩගින්නෙන් / කෙට්ටුයි",
+      "young": "පැටවු",
+      "needs_home": "ගෙදරක් ඕන",
+      "friendly": "හුරුයි"
+    },
+    "nav": {
+      "next": "ඊළඟට",
+      "back": "ආපසු",
+      "submit": "Report එක යවන්න",
+      "sending": "යවමින්…"
+    },
+    "error": {
+      "needPhoto": "ඉදිරියට යන්න අඩුම තරමින් photo එකක් දාන්න.",
+      "needLocation": "ඉදිරියට යන්න map එකේ pin එක දාන්න.",
+      "needType": "බල්ලෙක්ද පූසෙක්ද කියලා තෝරන්න.",
+      "upload": "Photos upload කරන්න බැරි වුණා. Internet එක බලලා ආයෙත් try කරන්න.",
+      "save": "Report එක save කරන්න බැරි වුණා. ආයෙත් try කරන්න.",
+      "tooFast": "තව report එකක් යවන්න ඉස්සර පොඩ්ඩක් ඉන්න."
+    },
+    "progress": {
+      "upload": "Photos upload කරනවා",
+      "save": "Report එක save කරනවා"
+    },
+    "success": {
+      "title": "ස්තූතියි! Report එක ගියා.",
+      "body": "දැන් volunteers ලාට map එකේ පේනවා.",
+      "view": "Report එක බලන්න",
+      "map": "Map එක බලන්න",
+      "another": "තව සතෙක් report කරන්න"
+    }
   }
 }

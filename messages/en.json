@@ -75,5 +75,83 @@
       "body": "The same person who stopped that rainy night finally gave him a home. Both ears are up now.",
       "dot": "Home"
     }
+  },
+  "report": {
+    "title": "Report a pet",
+    "subtitle": "It takes about a minute. No login needed.",
+    "stepsLabel": "Report steps",
+    "steps": {
+      "photo": "Photo",
+      "location": "Location",
+      "details": "Details"
+    },
+    "photo": {
+      "title": "Take a photo",
+      "hint": "A clear photo helps volunteers find and recognise the animal.",
+      "take": "Take a photo",
+      "choose": "Choose from gallery",
+      "addMore": "Add another photo",
+      "remove": "Remove photo {n}",
+      "alt": "Photo {n} of the animal",
+      "limit": "You can add up to {max} photos.",
+      "working": "Making the photo smaller…",
+      "readError": "We couldn't read that photo. Please try another one."
+    },
+    "location": {
+      "title": "Where is the animal?",
+      "hint": "Drag the pin to the exact spot, or tap the map.",
+      "useMine": "Use my location",
+      "locating": "Finding you…",
+      "failed": "We couldn't get your location. Tap the map to place the pin instead.",
+      "mapLabel": "Map for choosing the animal's location",
+      "label": "Landmark or street (optional)",
+      "labelPlaceholder": "e.g. near the bus stand",
+      "placed": "Pin placed"
+    },
+    "details": {
+      "title": "Tell us about the animal",
+      "type": "What animal is it?",
+      "dog": "Dog",
+      "cat": "Cat",
+      "conditions": "What do you see? Pick all that apply.",
+      "urgent": "This will be marked urgent so volunteers see it first.",
+      "noteLabel": "Anything else? (optional)",
+      "notePlaceholder": "e.g. limping, wears a green collar, stays near the temple",
+      "contactLabel": "Your phone or email (optional)",
+      "contactHint": "Only site admins can see this."
+    },
+    "condition": {
+      "injured": "Injured",
+      "sick": "Sick",
+      "hungry": "Hungry or thin",
+      "young": "Puppies or kittens",
+      "needs_home": "Needs a home",
+      "friendly": "Friendly"
+    },
+    "nav": {
+      "next": "Next",
+      "back": "Back",
+      "submit": "Send report",
+      "sending": "Sending…"
+    },
+    "error": {
+      "needPhoto": "Add at least one photo to continue.",
+      "needLocation": "Place the pin on the map to continue.",
+      "needType": "Choose dog or cat.",
+      "upload": "We couldn't upload the photos. Check your internet and try again.",
+      "save": "We couldn't save the report. Please try again.",
+      "tooFast": "Please wait a moment before sending another report."
+    },
+    "progress": {
+      "upload": "Uploading photos",
+      "save": "Saving the report"
+    },
+    "success": {
+      "title": "Thank you! Report sent.",
+      "body": "Volunteers can now see it on the map.",
+      "view": "See the report",
+      "map": "Open the map",
+      "another": "Report another animal"
+    }
   }
 }

@@ -25,3 +25,17 @@ export const reportKinds = [
 export type ReportKind = (typeof reportKinds)[number];
 
 export const PHOTO_BUCKET = "pet-photos";
+
+/** Condition chips on the report form. Stored in pets.conditions. */
+export const petConditions = ["injured", "sick", "hungry", "young", "needs_home", "friendly"] as const;
+export type PetCondition = (typeof petConditions)[number];
+
+/** Any of these marks the pet urgent: injured, sick, puppies/kittens. */
+export const urgentConditions: readonly PetCondition[] = ["injured", "sick", "young"];
+
+export const isUrgent = (conditions: readonly string[]) =>
+  conditions.some((c) => (urgentConditions as readonly string[]).includes(c));
+
+export const MAX_PHOTOS = 3;
+export const PHOTO_TARGET_BYTES = 200 * 1024;
+export const PHOTO_MAX_WIDTH = 1600;

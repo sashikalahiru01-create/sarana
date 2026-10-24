@@ -127,6 +127,18 @@ h3 {
   cursor: pointer;
 }
 
+/* Skeleton shimmer for loading lists, maps and cards (never an empty spinner). */
+.shimmer {
+  background: linear-gradient(90deg, var(--line) 25%, color-mix(in srgb, var(--line) 55%, var(--surface)) 50%, var(--line) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 @layer components {
   .card {
     @apply rounded-card bg-surface shadow-soft;
