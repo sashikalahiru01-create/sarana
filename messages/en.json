@@ -63,7 +63,26 @@
       "adopted": "Found a home",
       "volunteers": "Volunteers"
     },
-    "watchStory": "Watch Brownie's story"
+    "watchStory": "Watch Brownie's story",
+    "hero": {
+      "eyebrow": "Help street animals",
+      "title": "Every street animal deserves a home.",
+      "subtitle": "See a dog or cat in trouble? Snap a photo, drop a pin, and volunteers nearby will help.",
+      "secondary": "See animals near you",
+      "trust1": "No app to download",
+      "trust2": "No login needed",
+      "trust3": "Takes one minute",
+      "waiting": "Animals waiting for help: {n}",
+      "allSafe": "Everyone is safe right now",
+      "brownie": "Brownie the dog. Press to make him bark.",
+      "bark": "Woof!",
+      "period": {
+        "night": "Night time in Sri Lanka",
+        "dawn": "Early morning in Sri Lanka",
+        "day": "Daytime in Sri Lanka",
+        "dusk": "Evening in Sri Lanka"
+      }
+    }
   },
   "story": {
     "hint": "Scroll down",
