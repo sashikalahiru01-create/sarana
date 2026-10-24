@@ -228,5 +228,65 @@
     "title": "Partners who help us help them",
     "slot": "Your logo here",
     "cta": "Become a partner"
+  },
+  "guide": {
+    "how": "Just three taps!",
+    "stats": "Look what we did together!",
+    "help": "Pick what you can do",
+    "faq": "Ask me anything",
+    "door": "Ready? I'll be waiting!"
+  },
+  "ways": {
+    "eyebrow": "Ways to help",
+    "title": "Can't report? You can still help.",
+    "feed": {
+      "title": "Feed",
+      "body": "Leave food and fresh water for a hungry animal."
+    },
+    "transport": {
+      "title": "Give a lift",
+      "body": "Take an animal to a vet or to a safe place."
+    },
+    "foster": {
+      "title": "Foster",
+      "body": "Give a temporary home while a family is found."
+    },
+    "vet": {
+      "title": "Vet care",
+      "body": "Treat, vaccinate or check an animal."
+    },
+    "adopt": {
+      "title": "Give a home",
+      "body": "Welcome a dog or cat into your family."
+    },
+    "share": {
+      "title": "Share",
+      "body": "Send Sarana to your friends on WhatsApp.",
+      "text": "Help street animals with Sarana"
+    }
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Ask Brownie anything",
+    "q1": {
+      "q": "Do I need to log in?",
+      "a": "No. You can report an animal without an account. Log in only if you want to follow your reports or sign up as a volunteer."
+    },
+    "q2": {
+      "q": "Is Sarana free?",
+      "a": "Yes. Reporting, finding animals and volunteering are free."
+    },
+    "q3": {
+      "q": "What happens after I report?",
+      "a": "Your report appears on the map. Volunteers nearby can offer help, and the animal moves from reported to help on the way, then safe, and finally adopted."
+    },
+    "q4": {
+      "q": "Is my phone number safe?",
+      "a": "Your contact is optional and private. Only you and the site admins can see it."
+    },
+    "q5": {
+      "q": "What if the animal is injured?",
+      "a": "Keep a calm distance, take a clear photo and report it. Do not force food on an injured animal. Volunteers will take it from there."
+    }
   }
 }

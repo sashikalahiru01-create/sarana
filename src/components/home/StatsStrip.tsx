@@ -1,6 +1,7 @@
 import { HandHeart, House, PawPrint, ShieldCheck, type LucideIcon } from "lucide-react";
 import { getTranslator } from "@/i18n/server";
 import { createClient } from "@/lib/supabase/server";
+import { GuideTitle } from "./GuideTitle";
 
 type Stats = { reported: number; helped: number; adopted: number; volunteers: number };
 
@@ -28,8 +29,9 @@ export async function StatsStrip() {
 
   return (
     <section className="mx-auto max-w-5xl px-4 pt-12">
-      <p className="eyebrow">{t("home.stats.eyebrow")}</p>
-      <h2 className="mt-3 text-[clamp(24px,3.4vw,36px)]">{t("home.stats.title")}</h2>
+      <GuideTitle pose="proud" say={t("guide.stats")} eyebrow={t("home.stats.eyebrow")} className="text-[clamp(26px,3.8vw,40px)]">
+        {t("home.stats.title")}
+      </GuideTitle>
 
       <dl className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
         {tiles.map(({ key, icon: Icon, tint }) => (

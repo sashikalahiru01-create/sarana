@@ -1,5 +1,6 @@
 import { Camera, HandHeart, MapPin, type LucideIcon } from "lucide-react";
 import { getTranslator } from "@/i18n/server";
+import { GuideTitle } from "./GuideTitle";
 
 const steps: { key: "s1" | "s2" | "s3"; icon: LucideIcon; tint: string }[] = [
   { key: "s1", icon: Camera, tint: "bg-coral/12 text-coral-ink dark:text-brownie" },
@@ -12,8 +13,9 @@ export async function HowItWorks() {
 
   return (
     <section className="mx-auto max-w-5xl px-4 pb-8 pt-20">
-      <p className="eyebrow">{t("home.how.eyebrow")}</p>
-      <h2 className="mt-3 max-w-[20ch] text-[clamp(28px,4.4vw,46px)]">{t("home.how.title")}</h2>
+      <GuideTitle pose="point" say={t("guide.how")} eyebrow={t("home.how.eyebrow")}>
+        {t("home.how.title")}
+      </GuideTitle>
 
       <ol className="mt-10 grid gap-4 md:grid-cols-3">
         {steps.map(({ key, icon: Icon, tint }, i) => (

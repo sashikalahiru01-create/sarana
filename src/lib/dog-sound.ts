@@ -108,3 +108,23 @@ export function playWoofWoof() {
   playBark("woof", 1);
   setTimeout(() => playBark("woof", 1.12), 250);
 }
+
+/** A soft "boing" for when Brownie lands. Quiet on purpose. */
+export function playBoing() {
+  if (!getSoundOn()) return;
+  const ac = audio();
+  if (!ac) return;
+  const t = ac.currentTime + 0.01;
+  const tone = ac.createOscillator();
+  tone.type = "sine";
+  tone.frequency.setValueAtTime(190, t);
+  tone.frequency.exponentialRampToValueAtTime(520, t + 0.09);
+  tone.frequency.exponentialRampToValueAtTime(260, t + 0.24);
+  const level = ac.createGain();
+  level.gain.setValueAtTime(0.0001, t);
+  level.gain.exponentialRampToValueAtTime(0.3, t + 0.015);
+  level.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+  tone.connect(level).connect(ac.destination);
+  tone.start(t);
+  tone.stop(t + 0.28);
+}

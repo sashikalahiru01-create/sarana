@@ -2,6 +2,7 @@ import { Camera, PawPrint } from "lucide-react";
 import Link from "next/link";
 import { ReplayButton } from "@/components/story/ReplayButton";
 import { getTranslator } from "@/i18n/server";
+import { GuideTitle } from "./GuideTitle";
 
 /**
  * Night-sky call to action that closes a page. On /story the second button replays the story;
@@ -18,7 +19,9 @@ export async function ClosingPanel({ variant }: { variant: "story" | "home" }) {
         <div aria-hidden="true" className="absolute -bottom-28 left-1/3 -z-10 size-72 rounded-full bg-gold/15 blur-3xl" />
         <PawPrint aria-hidden="true" size={190} strokeWidth={1.25} className="absolute -bottom-6 right-4 -z-10 -rotate-12 text-white/8" />
 
-        <h2 className="max-w-[18ch] text-[clamp(30px,4.6vw,54px)] tracking-[-0.03em]">{t("home.title")}</h2>
+        <GuideTitle pose="door" say={t("guide.door")} className="mt-0 text-[clamp(30px,4.6vw,54px)] tracking-[-0.03em]" underline="text-gold">
+          {t("home.title")}
+        </GuideTitle>
         <p className="mt-4 max-w-[52ch] text-[17px] leading-[1.7] text-cream/80">{t("home.subtitle")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/report" className="btn btn-primary !min-h-14">

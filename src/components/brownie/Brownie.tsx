@@ -321,7 +321,7 @@ export function Brownie({ mood, label = "Brownie", collar = false, dusty = false
 
       <ellipse cx="200" cy="352" rx="135" ry="16" fill="#000" opacity=".28" filter={ref("soft")} />
 
-      <g data-part="hit" className={interactive ? "dog-hit" : undefined} role={interactive ? "button" : undefined} tabIndex={interactive ? 0 : undefined} aria-label={interactive ? label : undefined} style={interactive ? undefined : { pointerEvents: "none" }}>
+      <g data-part="hit" className={interactive ? "dog-hit" : undefined} role={interactive ? "button" : undefined} tabIndex={interactive ? 0 : undefined} aria-label={interactive ? label : undefined} style={{ pointerEvents: interactive ? "auto" : "none" }}>
         <g data-part="tail">
           <path d="M282 300 C 330 290, 352 255, 340 220" stroke="#B87437" strokeWidth="22" fill="none" strokeLinecap="round" />
           <path d="M285 298 C 326 288, 346 258, 338 230" stroke="#E2A866" strokeWidth="7" fill="none" strokeLinecap="round" opacity=".6" />
