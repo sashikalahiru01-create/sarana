@@ -398,6 +398,41 @@ h3 {
     transform: translateY(3px) scale(1.04);
   }
 }
+@keyframes otp-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-9px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+@keyframes ring-count {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: var(--ring, 88);
+  }
+}
+@keyframes cloud-drift {
+  0%,
+  100% {
+    transform: translateX(-14px);
+  }
+  50% {
+    transform: translateX(22px);
+  }
+}
 @keyframes rise-in {
   from {
     opacity: 0;

@@ -27,10 +27,10 @@ Never add a paid service or anything that needs a credit card without asking fir
 ### Phase 1 (build first)
 1. `/` Home: the Brownie scroll story (see `reference/sarana-story.html`), "Report a pet" button, a few nearby pets, stats
 2. `/map` Map + list of pets, filters: dogs / cats / urgent / needs a home
-3. `/report` Photo → location (GPS + draggable pin) → details (animal, condition chips, note). Works without login; phone or email optional
+3. `/report` Photo → location (GPS + draggable pin) → details (animal, condition chips, note). Login is asked only when the person presses Send (Google, Facebook later, or an emailed 6-digit code); the report is kept on the device meanwhile. Phone or email contact is optional
 4. `/pet/[id]` Photos, location, status timeline, "I'll help" and "Give a home" buttons, updates, share to WhatsApp / Facebook
 5. `/volunteer` Volunteer sign-up: skills (feeding, transport, foster, vet care) and area
-6. `/login` Google login + phone/email
+6. `/login` "Volunteer entrance" door scene. Google, Facebook (later) and email code. No phone/SMS login (it costs money)
 7. `/profile` My reports, animals I helped, settings
 8. `/about` About + contact
 

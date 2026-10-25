@@ -18,7 +18,7 @@ const items: { href: string; label: MessageKey; icon: LucideIcon }[] = [
  * Phone navigation: a frosted pill that floats above the page.
  * The Report button sits in the middle, raised and coral, so it is always in thumb reach.
  */
-export function BottomBar() {
+export function BottomBar({ loggedIn = false }: { loggedIn?: boolean }) {
   const t = useT();
   const pathname = usePathname();
 
@@ -35,7 +35,7 @@ export function BottomBar() {
           return (
             <li key={href} className="flex justify-center">
               <Link
-                href={href}
+                href={href === "/profile" && !loggedIn ? "/login?next=/profile" : href}
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition duration-200 ${
                   isReport ? "text-coral-ink dark:text-brownie" : active ? "text-foreground" : "text-muted"

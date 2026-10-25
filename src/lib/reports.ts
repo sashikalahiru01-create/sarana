@@ -23,8 +23,9 @@ export class ReportError extends Error {
 const extensionFor = (blob: Blob) => (blob.type === "image/webp" ? "webp" : blob.type === "image/png" ? "png" : "jpg");
 
 /**
- * Uploads the photos, then saves the pet. Works without login: if the visitor happens to be
- * signed in, the report is linked to them. Returns the new pet id.
+ * Uploads the photos, then saves the pet, linked to the logged-in person. The report form asks for login before
+ * calling this (the database itself still accepts anonymous reports; see the note in supabase/schema.sql).
+ * Returns the new pet id.
  */
 export async function submitReport(input: ReportInput, onProgress: (p: ReportProgress) => void): Promise<string> {
   const supabase = createClient();

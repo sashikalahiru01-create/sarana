@@ -23,7 +23,9 @@
     "main": "Main navigation",
     "mobile": "Mobile navigation",
     "story": "Brownie's story",
-    "reportCta": "Report a pet"
+    "reportCta": "Report a pet",
+    "account": "Account",
+    "logout": "Log out"
   },
   "language": {
     "label": "Language",
@@ -74,7 +76,7 @@
       "subtitle": "See a dog or cat in trouble? Snap a photo, drop a pin, and volunteers nearby will help.",
       "secondary": "See animals near you",
       "trust1": "No app to download",
-      "trust2": "No login needed",
+      "trust2": "Quick, safe login",
       "trust3": "Takes one minute",
       "waiting": "Animals waiting for help: {n}",
       "allSafe": "Everyone is safe right now",
@@ -150,7 +152,7 @@
   },
   "report": {
     "title": "Report a pet",
-    "subtitle": "It takes about a minute. No login needed.",
+    "subtitle": "It takes about a minute. You'll log in when you send.",
     "stepsLabel": "Report steps",
     "steps": {
       "photo": "Photo",
@@ -277,7 +279,7 @@
     "title": "Ask Brownie anything",
     "q1": {
       "q": "Do I need to log in?",
-      "a": "No. You can report an animal without an account. Log in only if you want to follow your reports or sign up as a volunteer."
+      "a": "To send a report, yes: a quick login with Google or an email code. You can take the photo and fill in the details first, and nothing is lost while you log in. It keeps reports trustworthy and lets you follow yours."
     },
     "q2": {
       "q": "Is Sarana free?",
@@ -431,5 +433,60 @@
     "title": "Want to do more?",
     "body": "Join the volunteer pack and help animals near you.",
     "cta": "Become a volunteer"
+  },
+  "login": {
+    "title": "Step through the door",
+    "eyebrow": "Volunteer entrance",
+    "subtitle": "Log in to join Brownie's pack: report animals and help the ones near you.",
+    "greeting": "Hello! Brownie was waiting for you",
+    "methods": {
+      "label": "Choose how to log in",
+      "google": "Continue with Google",
+      "facebook": "Continue with Facebook",
+      "email": "Continue with email",
+      "soon": "Soon",
+      "or": "or",
+      "notReady": "Google login isn't switched on yet. Please use email for now.",
+      "redirecting": "Opening Google…"
+    },
+    "email": {
+      "title": "What's your email?",
+      "label": "Email address",
+      "placeholder": "you@example.com",
+      "send": "Send me a code",
+      "sending": "Sending…",
+      "hint": "We only use your email to send this code. It is never shown to anyone.",
+      "invalid": "Please enter a valid email address."
+    },
+    "code": {
+      "title": "Enter your code",
+      "sent": "Brownie is bringing a 6-digit code to {email}.",
+      "label": "6-digit code",
+      "resend": "Send a new code",
+      "resendIn": "New code in {s}s",
+      "wrong": "Oops, that's not it. Try again!",
+      "expired": "That code has expired. Please ask for a new one.",
+      "change": "Use a different email",
+      "verifying": "Checking…"
+    },
+    "errors": {
+      "rate": "Too many tries. Please wait a few minutes and try again.",
+      "network": "We couldn't reach the server. Check your internet and try again.",
+      "generic": "Something went wrong. Please try again.",
+      "callback": "Login didn't finish. Please try again."
+    },
+    "welcome": {
+      "title": "Welcome, {name}!",
+      "body": "Opening the door for you…",
+      "tag": "Pack volunteer"
+    },
+    "back": "Back",
+    "gate": {
+      "title": "Log in to send your report",
+      "body": "Your photo and details are safe on this phone. One quick step and we'll send it.",
+      "restored": "Welcome back! Your report is ready. Tap send."
+    },
+    "sign": "Volunteer entrance",
+    "shh": "Shh… secret code"
   }
 }

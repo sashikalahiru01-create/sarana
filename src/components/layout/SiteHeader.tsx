@@ -1,12 +1,15 @@
 import { Camera, LogIn } from "lucide-react";
 import Link from "next/link";
 import { getTranslator } from "@/i18n/server";
+import { getCurrentUser } from "@/lib/auth";
+import { AccountMenu } from "./AccountMenu";
 import { BrandMark } from "./BrandMark";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MainNav } from "./MainNav";
 
 export async function SiteHeader() {
   const { t } = await getTranslator();
+  const user = await getCurrentUser();
 
   return (
     <header className="sticky top-0 z-40 border-b border-(--glass-line) bg-(--glass) backdrop-blur-xl backdrop-saturate-150">
@@ -20,10 +23,14 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <Link href="/login" aria-label={t("nav.login")} className="header-cta btn btn-ghost hidden !min-h-11 !px-3 whitespace-nowrap md:inline-flex lg:!px-4">
-            <LogIn size={18} aria-hidden="true" />
-            <span className="login-label hidden lg:inline">{t("nav.login")}</span>
-          </Link>
+          {user ? (
+            <AccountMenu name={user.name} email={user.email} avatarUrl={user.avatarUrl} />
+          ) : (
+            <Link href="/login" aria-label={t("nav.login")} className="header-cta btn btn-ghost hidden !min-h-11 !px-3 whitespace-nowrap md:inline-flex lg:!px-4">
+              <LogIn size={18} aria-hidden="true" />
+              <span className="login-label hidden lg:inline">{t("nav.login")}</span>
+            </Link>
+          )}
           <Link href="/report" className="header-cta btn btn-primary hidden !min-h-11 !px-4 whitespace-nowrap md:inline-flex">
             <Camera size={18} aria-hidden="true" />
             {t("nav.reportCta")}

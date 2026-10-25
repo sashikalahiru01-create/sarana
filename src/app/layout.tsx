@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { I18nProvider } from "@/i18n/client";
 import { getMessages } from "@/i18n/messages";
 import { getLocale, getTranslator } from "@/i18n/server";
+import { getCurrentUser } from "@/lib/auth";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -46,6 +47,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
   const { t } = await getTranslator();
+  const user = await getCurrentUser();
 
   return (
     <html
@@ -65,7 +67,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <SiteFooter />
-          <BottomBar />
+          <BottomBar loggedIn={user !== null} />
         </I18nProvider>
       </body>
     </html>

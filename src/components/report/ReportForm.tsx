@@ -3,10 +3,13 @@
 import { ArrowLeft, ArrowRight, CheckCircle2, HandHeart, Loader2, Send } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LoginPanel } from "@/components/auth/LoginPanel";
 import { PawConfetti } from "@/components/ui/PawConfetti";
 import { PawProgress } from "@/components/ui/PawProgress";
 import { useT } from "@/i18n/client";
 import { MAX_PHOTOS, type AnimalType } from "@/lib/domain";
+import { clearReportDraft, loadReportDraft, saveReportDraft } from "@/lib/report-draft";
+import { createClient } from "@/lib/supabase/client";
 import { compressImage } from "@/lib/image";
 import { ReportError, submitReport, type ReportProgress } from "@/lib/reports";
 import { DetailsStep } from "./DetailsStep";
@@ -36,6 +39,8 @@ export function ReportForm() {
   const [submitting, setSubmitting] = useState(false);
   const [progress, setProgress] = useState<ReportProgress>({ stage: "upload", value: 0 });
   const [done, setDone] = useState<Done | null>(null);
+  const [needLogin, setNeedLogin] = useState(false);
+  const [restored, setRestored] = useState(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -49,6 +54,25 @@ export function ReportForm() {
     headingRef.current?.focus({ preventScroll: true });
     scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [step, done]);
+
+  useEffect(() => {
+    let alive = true;
+    loadReportDraft().then((draft) => {
+      if (!alive || !draft) return;
+      setPhotos(draft.photos.map((blob) => ({ id: crypto.randomUUID(), blob, url: URL.createObjectURL(blob) })));
+      setPosition(draft.position);
+      setLocationLabel(draft.label);
+      setAnimal(draft.animal);
+      setConditions(draft.conditions);
+      setNote(draft.note);
+      setContact(draft.contact);
+      setStep(2);
+      setRestored(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // Free the preview URLs when leaving the page.
   useEffect(() => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)), []);
@@ -101,6 +125,13 @@ export function ReportForm() {
     // A filled honeypot means a bot: pretend it worked and send nothing.
     if (honeypot) return setDone({ id: null });
 
+    const { data: auth } = await createClient().auth.getSession();
+    if (!auth.session) {
+      await saveReportDraft({ animal, conditions, note, contact, position, label: locationLabel, photos: photos.map((p) => p.blob) });
+      setNeedLogin(true);
+      return;
+    }
+
     try {
       const last = Number(localStorage.getItem(COOLDOWN_KEY) ?? 0);
       if (Date.now() - last < COOLDOWN_MS) return setError(t("report.error.tooFast"));
@@ -130,6 +161,7 @@ export function ReportForm() {
       try {
         localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
       } catch {}
+      void clearReportDraft();
       setDone({ id });
     } catch (e) {
       setError(e instanceof ReportError && e.code === "upload" ? t("report.error.upload") : t("report.error.save"));
@@ -138,7 +170,14 @@ export function ReportForm() {
     }
   };
 
+  // after logging in, send the report straight away; the latest submit is kept here so the login panel never calls a stale copy
+  const submitRef = useRef(submit);
+  useEffect(() => {
+    submitRef.current = submit;
+  });
+
   const reset = () => {
+    setRestored(false);
     photos.forEach((p) => URL.revokeObjectURL(p.url));
     setPhotos([]);
     setPosition(null);
@@ -195,6 +234,30 @@ export function ReportForm() {
     );
   }
 
+  if (needLogin) {
+    return (
+      <div className="card flex flex-col gap-5 p-5 sm:p-6">
+        <header className="flex flex-col gap-1.5">
+          <h2 ref={headingRef} tabIndex={-1} className="text-2xl outline-none">
+            {t("login.gate.title")}
+          </h2>
+          <p className="text-muted">{t("login.gate.body")}</p>
+        </header>
+        <LoginPanel
+          next="/report"
+          onDone={() => {
+            setNeedLogin(false);
+            void submitRef.current();
+          }}
+        />
+        <button type="button" className="btn btn-ghost self-start" onClick={() => setNeedLogin(false)}>
+          <ArrowLeft size={18} aria-hidden="true" />
+          {t("login.back")}
+        </button>
+      </div>
+    );
+  }
+
   const titles = ["report.photo.title", "report.location.title", "report.details.title"] as const;
   const last = step === 2;
 
@@ -210,6 +273,11 @@ export function ReportForm() {
         <h2 ref={headingRef} tabIndex={-1} className="text-2xl outline-none">
           {t(titles[step])}
         </h2>
+        {restored && step === 2 && (
+          <p role="status" className="rounded-button bg-green/12 px-3 py-2 text-sm font-semibold text-green dark:text-[#4fc3a5]">
+            {t("login.gate.restored")}
+          </p>
+        )}
 
         {step === 0 && <PhotoStep photos={photos} busy={photoBusy} error={error} onAdd={addPhotos} onRemove={removePhoto} />}
         {step === 1 && <LocationStep position={position} label={locationLabel} onPosition={setPosition} onLabel={setLocationLabel} />}

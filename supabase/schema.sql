@@ -267,6 +267,9 @@ create policy "read visible pets" on public.pets
   for select to anon, authenticated
   using (not is_hidden or public.is_admin());
 
+-- NOTE: the website now asks people to log in before it sends a report, but this rule still lets anonymous
+-- visitors insert (it was written when no login was needed). To make the database enforce login too, change
+-- "to anon, authenticated" below to "to authenticated". That is a schema change: ask first, then run it in Supabase.
 drop policy if exists "anyone can report a pet" on public.pets;
 create policy "anyone can report a pet" on public.pets
   for insert to anon, authenticated
