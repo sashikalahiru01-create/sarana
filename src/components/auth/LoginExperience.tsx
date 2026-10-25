@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { CollarTag } from "@/components/volunteer/CollarTag";
 import { useT } from "@/i18n/client";
 import type { AuthProblem, LoggedIn } from "@/lib/auth-client";
-import { DoorScene, Landscape, type LoginMood } from "./DoorScene";
+import { DoorScene, type LoginMood } from "./DoorScene";
 import { LoginPanel, type PanelMood } from "./LoginPanel";
 
 /** The /login page: the door scene on top, the login card below. After logging in the door opens, then we move on. */
@@ -31,15 +31,13 @@ export function LoginExperience({ next, initialProblem }: { next: string; initia
 
   return (
     // Phone and tablet: the picture on top, the card overlapping its bottom edge.
-    // Laptop and desktop: one big sunny landscape with the house on the left and the card floating on the right.
-    <div className="relative isolate flex flex-col lg:grid lg:min-h-[38rem] lg:grid-cols-[1.1fr_1fr] lg:overflow-hidden lg:rounded-[40px] lg:shadow-pop lg:ring-1 lg:ring-black/10">
-      <Landscape opened={welcome !== null} className="hidden lg:block" />
+    // Laptop and desktop: two separate cards side by side, the picture on the left and the form on the right.
+    <div className="relative isolate flex flex-col lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-stretch lg:gap-8">
+      <DoorScene mood={mood} opened={welcome !== null} className="h-[17.5rem] sm:h-[23rem] lg:h-auto lg:min-h-[36rem]" />
 
-      <DoorScene mood={mood} opened={welcome !== null} className="h-[17.5rem] sm:h-[23rem] lg:h-auto" />
-
-      <div className="relative z-10 lg:flex lg:items-center lg:justify-center lg:p-10">
+      <div className="relative z-10 lg:flex lg:items-center">
       <section
-        className="card relative mx-3 -mt-8 flex flex-col gap-5 p-5 sm:mx-6 sm:p-7 lg:mx-0 lg:mt-0 lg:w-full lg:max-w-lg lg:border lg:border-(--glass-line) lg:bg-(--glass) lg:p-9 lg:backdrop-blur-xl lg:backdrop-saturate-150"
+        className="card relative mx-3 -mt-8 flex flex-col gap-5 p-5 sm:mx-6 sm:p-7 lg:mx-0 lg:mt-0 lg:w-full lg:p-9"
         aria-live="polite"
       >
         {welcome === null ? (

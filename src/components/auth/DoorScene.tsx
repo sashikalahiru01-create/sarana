@@ -1,11 +1,20 @@
 "use client";
 
 import { PawPrint } from "lucide-react";
+import { useSyncExternalStore } from "react";
 import { Brownie } from "@/components/brownie/Brownie";
 import { useT } from "@/i18n/client";
 
 /** What Brownie is doing. `n` goes up every time, so the same mood twice in a row (two wrong codes) still plays again. */
 export type LoginMood = { kind: "idle" | "watch" | "secret" | "wrong" | "happy"; n: number };
+
+const WIDE = "(min-width: 1024px)";
+const isWide = () => matchMedia(WIDE).matches;
+const subscribeWide = (onChange: () => void) => {
+  const mq = matchMedia(WIDE);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+};
 
 const FLOWERS = [
   { left: 6, bottom: 6, color: "#e4572e" },
@@ -54,16 +63,18 @@ export function Landscape({ opened, className = "" }: { opened: boolean; classNa
  * volunteer cap, waits beside it and reacts to what you do (watching you type, bowing his head with both paws over his
  * eyes while you enter the code). When you are logged in the door swings open and the light pours out.
  *
- * On a phone it is a rounded picture on its own, with its own landscape. On a desktop the page draws one big landscape
- * behind it and the card, so the picture here is only the house, the path and Brownie. Size it with `className`.
+ * It is a rounded picture with its own landscape. The form is a separate card: below it on a phone, beside it on a
+ * laptop, and Brownie looks toward it. Size it with `className`.
  */
 export function DoorScene({ mood, opened, className = "" }: { mood: LoginMood; opened: boolean; className?: string }) {
   const t = useT();
   const brownieMood = mood.kind === "wrong" ? "thinking" : "happy";
+  // The form is below the picture on a phone and to its right on a laptop; Brownie looks toward it.
+  const formIsBeside = useSyncExternalStore(subscribeWide, isWide, () => false);
 
   return (
-    <div className={`relative isolate overflow-hidden rounded-[32px] shadow-pop ring-1 ring-black/10 lg:rounded-none lg:shadow-none lg:ring-0 ${className}`}>
-      <Landscape opened={opened} className="lg:hidden" />
+    <div className={`relative isolate overflow-hidden rounded-[32px] shadow-pop ring-1 ring-black/10 ${className}`}>
+      <Landscape opened={opened} />
 
       {/* the house: a roof, a wall, a window and the door */}
       <div aria-hidden="true" className="absolute bottom-[12%] left-1/2 h-[76%] w-[80%] -translate-x-1/2 lg:left-[44%] lg:w-[78%]">
@@ -124,7 +135,8 @@ export function DoorScene({ mood, opened, className = "" }: { mood: LoginMood; o
         <Brownie
           mood={brownieMood}
           cap
-          gaze={mood.kind === "watch" ? "down" : undefined}
+          gaze={mood.kind === "watch" ? (formIsBeside ? "side" : "down") : undefined}
+          gazeDir={1}
           cover={mood.kind === "secret"}
           shake={mood.kind === "wrong" ? { id: mood.n } : undefined}
           bark={mood.kind === "happy" ? { id: mood.n } : undefined}
