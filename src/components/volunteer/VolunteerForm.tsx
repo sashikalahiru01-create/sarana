@@ -17,15 +17,21 @@ type Done = { name: string; area: string; skills: VolunteerSkill[] };
 const subscribeNothing = () => () => {};
 
 /** The form reads the saved draft from the phone, so it only renders in the browser. A shimmer holds its place until then. */
-export function VolunteerForm() {
+export function VolunteerForm({ onboarding }: { onboarding?: Onboarding }) {
   const mounted = useSyncExternalStore(subscribeNothing, () => true, () => false);
   if (!mounted) return <div className="shimmer h-96 rounded-card" aria-hidden="true" />;
-  return <FormInner />;
+  return <FormInner onboarding={onboarding} />;
 }
 
-function FormInner() {
+/** Used right after someone joins: the form is optional there, and finishing it leads on to where they were going. */
+export type Onboarding = { href: string; label: string; name: string | null };
+
+function FormInner({ onboarding }: { onboarding?: Onboarding }) {
   const t = useT();
-  const [draft, setDraft] = useState<VolunteerDraft>(loadDraft);
+  const [draft, setDraft] = useState<VolunteerDraft>(() => {
+    const saved = loadDraft();
+    return saved.name || !onboarding?.name ? saved : { ...saved, name: onboarding.name };
+  });
   const [step, setStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -99,12 +105,20 @@ function FormInner() {
         <p className="max-w-[40ch] text-muted">{t("volunteer.success.body", { area: done.area })}</p>
         <CollarTag name={done.name} role={t("volunteer.success.tag")} skills={skillNames(done.skills)} />
         <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link href="/map" className="btn btn-primary">
-            {t("volunteer.success.map")}
-          </Link>
-          <Link href="/" className="btn btn-ghost">
-            {t("volunteer.success.home")}
-          </Link>
+          {onboarding ? (
+            <Link href={onboarding.href} className="btn btn-primary">
+              {onboarding.label}
+            </Link>
+          ) : (
+            <>
+              <Link href="/map" className="btn btn-primary">
+                {t("volunteer.success.map")}
+              </Link>
+              <Link href="/" className="btn btn-ghost">
+                {t("volunteer.success.home")}
+              </Link>
+            </>
+          )}
         </div>
       </div>
     );

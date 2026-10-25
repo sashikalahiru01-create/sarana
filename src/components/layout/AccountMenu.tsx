@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LogOut, UserRound } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useT } from "@/i18n/client";
 import { signOut } from "@/lib/auth-actions";
@@ -55,6 +56,15 @@ export function AccountMenu({ name, email, avatarUrl }: Props) {
             {name && <p className="font-heading font-extrabold [overflow-wrap:anywhere]">{name}</p>}
             {email && <p className="text-sm text-muted [overflow-wrap:anywhere]">{email}</p>}
           </div>
+          <Link
+            href="/profile"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left font-semibold transition duration-200 hover:bg-foreground/8"
+          >
+            <UserRound size={18} aria-hidden="true" />
+            {t("nav.profileLink")}
+          </Link>
           <form action={signOut}>
             <button type="submit" role="menuitem" className="flex min-h-11 w-full items-center gap-2 rounded-xl px-3 text-left font-semibold transition duration-200 hover:bg-foreground/8">
               <LogOut size={18} aria-hidden="true" />

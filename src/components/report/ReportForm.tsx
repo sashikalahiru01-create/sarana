@@ -170,12 +170,6 @@ export function ReportForm() {
     }
   };
 
-  // after logging in, send the report straight away; the latest submit is kept here so the login panel never calls a stale copy
-  const submitRef = useRef(submit);
-  useEffect(() => {
-    submitRef.current = submit;
-  });
-
   const reset = () => {
     setRestored(false);
     photos.forEach((p) => URL.revokeObjectURL(p.url));
@@ -246,8 +240,9 @@ export function ReportForm() {
         <LoginPanel
           next="/report"
           onDone={() => {
+            // They are in. The report is ready on screen; they press Send themselves (nothing is sent by surprise).
             setNeedLogin(false);
-            void submitRef.current();
+            setRestored(true);
           }}
         />
         <button type="button" className="btn btn-ghost self-start" onClick={() => setNeedLogin(false)}>

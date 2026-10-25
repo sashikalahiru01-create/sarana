@@ -74,6 +74,31 @@ export async function submitVolunteer(draft: VolunteerDraft): Promise<SubmitResu
     radius_km: draft.radiusKm,
     is_active: true,
   });
-  if (!error) return { status: "ok" };
+  if (!error) {
+    // Use the sign-up name as the public name too, but never overwrite one the person chose themselves.
+    await supabase.from("profiles").update({ display_name: draft.name.trim().slice(0, 80) }).eq("id", userId).is("display_name", null);
+    return { status: "ok" };
+  }
   return error.code === "23505" ? { status: "already" } : { status: "error" };
+}
+
+/** The volunteer details as saved in the database, plus whether they are available right now. */
+export type MyVolunteer = VolunteerDraft & { isActive: boolean };
+
+/** Saves changes to the logged-in person's volunteer details (the profile page). Returns true when saved. */
+export async function updateVolunteer(userId: string, draft: VolunteerDraft, isActive: boolean): Promise<boolean> {
+  const { error } = await createClient()
+    .from("volunteers")
+    .update({
+      full_name: draft.name.trim(),
+      phone: draft.phone.trim(),
+      skills: draft.skills,
+      area: draft.area.trim(),
+      lat: draft.lat,
+      lng: draft.lng,
+      radius_km: draft.radiusKm,
+      is_active: isActive,
+    })
+    .eq("user_id", userId);
+  return !error;
 }

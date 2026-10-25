@@ -25,7 +25,8 @@
     "story": "Brownie's story",
     "reportCta": "Report a pet",
     "account": "Account",
-    "logout": "Log out"
+    "logout": "Log out",
+    "profileLink": "My profile"
   },
   "language": {
     "label": "Language",
@@ -477,8 +478,23 @@
     },
     "welcome": {
       "title": "Welcome, {name}!",
-      "body": "Opening the door for you…",
-      "tag": "Pack volunteer"
+      "body": "You're in. The door is open!",
+      "tag": "Pack member",
+      "returning": "Welcome back, {name}!",
+      "go": {
+        "report": "Back to my report",
+        "pet": "Back to the animal",
+        "volunteer": "Open the volunteer form",
+        "profile": "Open my profile",
+        "map": "See animals on the map",
+        "home": "Go to the home page",
+        "other": "Carry on"
+      },
+      "volunteerTitle": "Want to help the animals near you?",
+      "volunteerBody": "Tell us what you can do and where you live. Volunteers near an animal are told first. It takes a minute.",
+      "volunteerYes": "Add my volunteer details",
+      "volunteerSkip": "Skip for now",
+      "volunteerLater": "You can do this any time from your profile."
     },
     "back": "Back",
     "gate": {
@@ -599,5 +615,65 @@
     "map": "See animals on the map",
     "petTitle": "Brownie can't find this animal",
     "petBody": "The report may have been removed, or the link is wrong."
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Everything about you in one place.",
+    "badge": {
+      "volunteer": "Volunteer",
+      "admin": "Admin",
+      "member": "Pack member"
+    },
+    "stats": {
+      "reports": "Reports",
+      "helped": "Animals helped"
+    },
+    "account": {
+      "title": "Account",
+      "name": "Your name",
+      "namePlaceholder": "e.g. Nimal",
+      "nameHint": "Shown on the animals you report or help. Optional.",
+      "email": "Email",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": "Couldn't save. Please try again."
+    },
+    "password": {
+      "title": "Password",
+      "intro": "Choose a new password.",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "change": "Change password",
+      "changing": "Changing…",
+      "changed": "Password changed"
+    },
+    "volunteer": {
+      "title": "Volunteer details",
+      "intro": "Volunteers near an animal are told about it first.",
+      "none": "You're not a volunteer yet",
+      "noneBody": "Tell us what you can do and where you live. It takes a minute.",
+      "join": "Become a volunteer",
+      "active": "Available to help right now",
+      "activeHint": "Switch off when you're busy. We won't ask you.",
+      "skills": "What can you do?",
+      "save": "Save volunteer details"
+    },
+    "reports": {
+      "title": "My reports",
+      "empty": "You haven't reported an animal yet.",
+      "emptyCta": "Report an animal"
+    },
+    "helped": {
+      "title": "Animals I helped",
+      "empty": "When you offer help, the animal shows up here.",
+      "emptyCta": "See animals on the map",
+      "role": {
+        "offer_help": "You offered to help",
+        "offer_home": "You offered a home",
+        "update": "You posted an update",
+        "status": "You updated its status"
+      }
+    }
   }
 }

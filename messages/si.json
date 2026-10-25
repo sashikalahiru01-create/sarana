@@ -25,7 +25,8 @@
     "story": "බ්‍රවුනි ගේ කතාව",
     "reportCta": "Report කරන්න",
     "account": "ගිණුම",
-    "logout": "Log out වෙන්න"
+    "logout": "Log out වෙන්න",
+    "profileLink": "මගේ profile එක"
   },
   "language": {
     "label": "භාෂාව",
@@ -477,8 +478,23 @@
     },
     "welcome": {
       "title": "සාදරයෙන් පිළිගන්නවා, {name}!",
-      "body": "ඔයාට දොර විවෘත කරනවා…",
-      "tag": "Pack volunteer"
+      "body": "ඔයා ඇතුළට ආවා. දොර විවෘතයි!",
+      "tag": "Pack සාමාජික",
+      "returning": "ආයෙත් සාදරයෙන්, {name}!",
+      "go": {
+        "report": "මගේ report එකට ආපහු යන්න",
+        "pet": "සතා ළඟට ආපහු යන්න",
+        "volunteer": "Volunteer ෆෝරමය විවෘත කරන්න",
+        "profile": "මගේ profile එකට යන්න",
+        "map": "සිතියමේ සතුන් බලන්න",
+        "home": "මුල් පිටුවට යන්න",
+        "other": "ඉදිරියට යන්න"
+      },
+      "volunteerTitle": "ඔයා ළඟ ඉන්න සතුන්ට උදව් කරන්න කැමතිද?",
+      "volunteerBody": "ඔයාට පුළුවන් දේ සහ ඔයා ඉන්න ප්‍රදේශය කියන්න. සතෙක් ළඟ ඉන්න volunteers ට කලින්ම දැනුම් දෙනවා. විනාඩියයි ගන්නේ.",
+      "volunteerYes": "Volunteer විස්තර දාන්න",
+      "volunteerSkip": "දැනට මඟ හරින්න",
+      "volunteerLater": "මේක ඕනම වෙලාවක ඔයාගේ profile එකෙන් කරන්න පුළුවන්."
     },
     "back": "ආපසු",
     "gate": {
@@ -599,5 +615,65 @@
     "map": "සිතියමේ සතුන් බලන්න",
     "petTitle": "බ්‍රවුනිට මේ සතා හොයාගන්න බැරි වුණා",
     "petBody": "Report එක ඉවත් කරලා ඇති, නැත්නම් link එක වැරදියි."
+  },
+  "profile": {
+    "title": "මගේ profile එක",
+    "subtitle": "ඔයා ගැන හැමදේම එක තැනක.",
+    "badge": {
+      "volunteer": "Volunteer",
+      "admin": "Admin",
+      "member": "Pack සාමාජික"
+    },
+    "stats": {
+      "reports": "Reports",
+      "helped": "උදව් කළ සතුන්"
+    },
+    "account": {
+      "title": "ගිණුම",
+      "name": "ඔයාගේ නම",
+      "namePlaceholder": "උදා: නිමල්",
+      "nameHint": "ඔයා report කරපු හෝ උදව් කරපු සතුන්ගේ පිටුවල පෙන්වනවා. අවශ්‍ය නැත්නම් හිස්ව තියන්න.",
+      "email": "Email එක",
+      "save": "සුරකින්න",
+      "saving": "සුරකිනවා…",
+      "saved": "සුරැකුවා",
+      "error": "සුරකින්න බැරි වුණා. ආයෙත් try කරන්න."
+    },
+    "password": {
+      "title": "Password එක",
+      "intro": "අලුත් password එකක් තෝරන්න.",
+      "new": "අලුත් password එක",
+      "confirm": "අලුත් password එක නැවත ඇතුළත් කරන්න",
+      "change": "Password එක වෙනස් කරන්න",
+      "changing": "වෙනස් කරනවා…",
+      "changed": "Password එක වෙනස් වුණා"
+    },
+    "volunteer": {
+      "title": "Volunteer විස්තර",
+      "intro": "සතෙක් ළඟ ඉන්න volunteers ට කලින්ම දැනුම් දෙනවා.",
+      "none": "ඔයා තවම volunteer කෙනෙක් නෙවෙයි",
+      "noneBody": "ඔයාට පුළුවන් දේ සහ ඉන්න ප්‍රදේශය කියන්න. විනාඩියයි ගන්නේ.",
+      "join": "Volunteer කෙනෙක් වෙන්න",
+      "active": "දැන් උදව් කරන්න පුළුවන්",
+      "activeHint": "කාර්යබහුල නම් off කරන්න. එතකොට ඔයාට දැනුම් දෙන්නේ නැහැ.",
+      "skills": "ඔයාට කරන්න පුළුවන් දේ",
+      "save": "Volunteer විස්තර සුරකින්න"
+    },
+    "reports": {
+      "title": "මගේ reports",
+      "empty": "ඔයා තවම සතෙක් report කරලා නැහැ.",
+      "emptyCta": "සතෙක් report කරන්න"
+    },
+    "helped": {
+      "title": "මම උදව් කළ සතුන්",
+      "empty": "ඔයා උදව් කරන්න ඉදිරිපත් වුණාම ඒ සතා මෙතන පෙන්වනවා.",
+      "emptyCta": "සිතියමේ සතුන් බලන්න",
+      "role": {
+        "offer_help": "ඔයා උදව් කරන්න කැමති වුණා",
+        "offer_home": "ඔයා ගෙදරක් දෙන්න කැමති වුණා",
+        "update": "ඔයා update එකක් දැම්මා",
+        "status": "ඔයා තත්ත්වය වෙනස් කළා"
+      }
+    }
   }
 }

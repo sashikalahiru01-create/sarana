@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Circle, Eye, EyeOff, Loader2, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Circle, Loader2, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useT } from "@/i18n/client";
@@ -10,7 +10,6 @@ import {
   CODE_LENGTH,
   isEmail,
   loadProviders,
-  PASSWORD_MAX,
   sendEmailCode,
   setPassword as savePasswordFor,
   signInWithPassword,
@@ -21,13 +20,15 @@ import {
   type Providers,
 } from "@/lib/auth-client";
 import { OtpInput } from "./OtpInput";
+import { inputClass, PasswordField } from "./PasswordField";
 
 export type PanelMood = "idle" | "watch" | "secret" | "wrong";
 
 type Props = {
   /** Where Google should send the visitor after logging in. */
   next: string;
-  onDone: (user: LoggedIn) => void;
+  /** `isNew`: they just created their account (chose a password after a code), so we can offer the volunteer details. */
+  onDone: (user: LoggedIn, info: { isNew: boolean }) => void;
   /** Lets a mascot react to what the visitor is doing. */
   onMood?: (mood: PanelMood) => void;
   /** A problem to show on arrival, for example when Google sent them back without finishing. */
@@ -57,65 +58,6 @@ function FacebookMark() {
       <circle cx="12" cy="12" r="12" fill="#1877F2" />
       <path fill="#fff" d="M13.4 19.5v-6.1h2l.4-2.4h-2.4V9.5c0-.7.3-1.2 1.3-1.2h1.2V6.2c-.2 0-1-.1-1.8-.1-1.9 0-3.1 1.1-3.1 3.2V11H8.9v2.4H11v6.1h2.4z" />
     </svg>
-  );
-}
-
-const inputClass = "min-h-14 w-full rounded-button border-[1.5px] bg-surface px-4 text-[16px]";
-
-/** A password box with a show/hide eye. Keeps its own look so the three password fields match. */
-function PasswordField({
-  label,
-  value,
-  onChange,
-  autoComplete,
-  show,
-  onToggle,
-  showLabel,
-  hideLabel,
-  invalid = false,
-  autoFocus = false,
-  onFocus,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  autoComplete: "current-password" | "new-password";
-  show: boolean;
-  onToggle: () => void;
-  showLabel: string;
-  hideLabel: string;
-  invalid?: boolean;
-  autoFocus?: boolean;
-  onFocus?: () => void;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="font-semibold">{label}</span>
-      <span className="relative block">
-        <input
-          type={show ? "text" : "password"}
-          autoComplete={autoComplete}
-          autoCapitalize="off"
-          spellCheck={false}
-          value={value}
-          maxLength={PASSWORD_MAX}
-          aria-invalid={invalid}
-          autoFocus={autoFocus}
-          onFocus={onFocus}
-          onChange={(e) => onChange(e.target.value)}
-          className={`${inputClass} pr-14 ${invalid ? "border-coral" : "border-line"}`}
-        />
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-label={show ? hideLabel : showLabel}
-          aria-pressed={show}
-          className="absolute right-1 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-button text-muted transition duration-200 hover:text-foreground"
-        >
-          {show ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
-        </button>
-      </span>
-    </label>
   );
 }
 
@@ -255,7 +197,7 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
       return setProblem(result.problem);
     }
     router.refresh(); // headers and other server parts now know who is logged in
-    onDone(result.value);
+    onDone(result.value, { isNew: false });
   };
 
   const savePassword = async () => {
@@ -270,7 +212,7 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
     setBusy(null);
     if (!result.ok) return setProblem(result.problem);
     router.refresh();
-    onDone(verified);
+    onDone(verified, { isNew: purpose === "create" });
   };
 
   const verify = async (value: string) => {
