@@ -78,7 +78,7 @@
       "trust1": "No app to download",
       "trust2": "Quick, safe login",
       "trust3": "Takes one minute",
-      "waiting": "Animals waiting for help: {n}",
+      "waiting": "Animals not safe yet: {n}",
       "allSafe": "Everyone is safe right now",
       "brownie": "Brownie the dog. Press to make him bark.",
       "bark": "Woof!",
@@ -488,5 +488,88 @@
     },
     "sign": "Volunteer entrance",
     "shh": "Shh… secret code"
+  },
+  "pet": {
+    "back": "Back to the map",
+    "photosLabel": "Photos of this animal",
+    "photoOpen": "Show photo {n} of {total}",
+    "noPhoto": "No photo yet",
+    "about": "What the reporter saw",
+    "noNote": "No extra details yet.",
+    "journey": {
+      "title": "Its journey",
+      "reported": "Someone spotted this animal and shared it.",
+      "help_on_the_way": "A volunteer is on the way or has said yes.",
+      "safe": "Fed, safe, or checked by a vet.",
+      "adopted": "Found a loving home."
+    },
+    "where": {
+      "title": "Where to find it",
+      "open": "Open in OpenStreetMap",
+      "mapLabel": "Map showing where this animal was seen",
+      "pinned": "Pinned on the map"
+    },
+    "help": {
+      "title": "Can you help?",
+      "none": "No one has offered yet. You could be the first!",
+      "offers": "{n} offered to help",
+      "homes": "{n} offered a home",
+      "help": "I'll help",
+      "home": "Give a home",
+      "update": "Post an update",
+      "loginNote": "Log in first. It takes less than a minute.",
+      "helpTitle": "How can you help?",
+      "type": {
+        "food": "Food and water",
+        "vet": "Vet care",
+        "transport": "A lift",
+        "foster": "Foster"
+      },
+      "homeTitle": "Give this animal a home",
+      "homeBody": "The reporter and volunteers will see your offer. Add a note if you like.",
+      "updateTitle": "Post an update",
+      "statusLabel": "Change the status (volunteers)",
+      "statusKeep": "Keep as it is",
+      "noteLabel": "Note (optional)",
+      "placeholderHelp": "e.g. I can bring food tonight",
+      "placeholderHome": "e.g. We have a garden and love dogs",
+      "placeholderUpdate": "e.g. Fed and gave water. It is friendly.",
+      "send": "Send",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "pickHelp": "Pick one way to help.",
+      "needNote": "Write a short note.",
+      "error": "Couldn't send that. Check your internet and try again.",
+      "thanksTitle": "Thank you!",
+      "thanksBody": "Your message is on the timeline. Brownie is wagging his tail.",
+      "done": "Done"
+    },
+    "timeline": {
+      "title": "What has happened",
+      "someone": "A neighbour",
+      "reported": "{name} reported this animal",
+      "help_on_the_way": "{name} says help is on the way",
+      "safe": "{name} marked it safe",
+      "adopted": "{name} says it found a home!",
+      "update": "{name} posted an update",
+      "offer_help": "{name} offered to help",
+      "offer_home": "{name} offered a home"
+    },
+    "share": {
+      "title": "Share to find help faster",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "text": "Help needed: a {type}. See it on Sarana:"
+    }
+  },
+  "notFound": {
+    "title": "Brownie sniffed everywhere",
+    "body": "He can't find this page. It may have moved, or the link is wrong.",
+    "home": "Go home",
+    "map": "See animals on the map",
+    "petTitle": "Brownie can't find this animal",
+    "petBody": "The report may have been removed, or the link is wrong."
   }
 }

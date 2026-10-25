@@ -18,8 +18,9 @@ export type StreetAnimal = "dog" | "cat" | "pups" | "kittens";
 export type Waiting = { count: number; animals: StreetAnimal[] };
 
 /**
- * Urgent animals nobody has offered to help yet: how many, and the kind of the latest four
- * (those are the ones shown in the window). Null if the database cannot be reached.
+ * Animals that are not safe yet (reported, or help is on the way; urgent or not): how many, and the kind of four of them,
+ * urgent ones first then the newest (those are the ones shown in the window). "Everyone is safe" only shows when none
+ * are left. Null if the database cannot be reached.
  */
 export async function getWaiting(): Promise<Waiting | null> {
   try {
@@ -27,8 +28,8 @@ export async function getWaiting(): Promise<Waiting | null> {
     const { data, count, error } = await supabase
       .from("pets")
       .select("animal_type, conditions", { count: "exact" })
-      .eq("is_urgent", true)
-      .eq("status", "reported")
+      .in("status", ["reported", "help_on_the_way"])
+      .order("is_urgent", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(4);
     if (error) return null;

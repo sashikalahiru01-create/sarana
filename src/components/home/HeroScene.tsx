@@ -61,7 +61,7 @@ const subscribeReduced = (onChange: () => void) => {
 
 type Props = {
   period: DayPeriod;
-  /** Urgent animals still waiting for help. Null when the numbers could not be loaded. */
+  /** Animals that are not safe yet (urgent ones first). Null when the numbers could not be loaded. */
   waiting: Waiting | null;
 };
 

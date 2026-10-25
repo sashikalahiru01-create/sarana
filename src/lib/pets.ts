@@ -27,11 +27,11 @@ export const statusColor: Record<PetStatus, string> = {
   adopted: "#f2b544",
 };
 
-const COLUMNS = "id, animal_type, status, is_urgent, conditions, lat, lng, photo_paths, note, location_label, created_at";
+export const PET_COLUMNS = "id, animal_type, status, is_urgent, conditions, lat, lng, photo_paths, note, location_label, created_at";
 
 /** The newest visible animals. Hidden (moderated) ones never come back: the database hides them. */
 export async function fetchPets(): Promise<Pet[]> {
-  const { data, error } = await createClient().from("pets").select(COLUMNS).order("created_at", { ascending: false }).limit(300);
+  const { data, error } = await createClient().from("pets").select(PET_COLUMNS).order("created_at", { ascending: false }).limit(300);
   if (error) throw error;
   return (data ?? []) as Pet[];
 }
