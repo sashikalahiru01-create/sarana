@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     if (!error) return NextResponse.redirect(new URL(next, origin));
   }
   // the provider said no, or the link was used twice
-  const failed = new URL("/login", origin);
+  const failed = new URL("/join", origin);
   failed.searchParams.set("error", "callback");
   if (next !== "/") failed.searchParams.set("next", next);
   return NextResponse.redirect(failed);

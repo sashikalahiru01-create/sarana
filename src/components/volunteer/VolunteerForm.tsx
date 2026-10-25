@@ -117,7 +117,7 @@ function FormInner() {
           {t("volunteer.gate.title")}
         </h2>
         <p className="max-w-[38ch] text-muted">{t("volunteer.gate.body")}</p>
-        <Link href="/login" className="btn btn-primary">
+        <Link href={`/join?next=${encodeURIComponent("/volunteer")}`} className="btn btn-primary">
           <LogIn size={18} aria-hidden="true" />
           {t("volunteer.gate.login")}
         </Link>

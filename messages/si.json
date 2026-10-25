@@ -19,7 +19,7 @@
     "volunteer": "Volunteer",
     "profile": "ගිණුම",
     "about": "අප ගැන",
-    "login": "ඇතුල් වන්න",
+    "login": "එකතු වෙන්න",
     "main": "ප්‍රධාන මෙනුව",
     "mobile": "ජංගම මෙනුව",
     "story": "බ්‍රවුනි ගේ කතාව",
@@ -435,12 +435,12 @@
     "cta": "Volunteer කෙනෙක් වෙන්න"
   },
   "login": {
-    "title": "දොරෙන් ඇතුළට එන්න",
+    "title": "බ්‍රවුනිගේ pack එකට එකතු වෙන්න",
     "eyebrow": "Volunteer ඇතුල්වීම",
-    "subtitle": "බ්‍රවුනිගේ pack එකට එකතු වෙන්න login වෙන්න: සතුන් report කරන්න, ඔයා ළඟ ඉන්න සතුන්ට උදව් කරන්න.",
+    "subtitle": "සතුන් report කරන්න, ඔයා ළඟ ඉන්න සතුන්ට උදව් කරන්න. මෙතනින් එකතු වෙන්න.",
     "greeting": "ආයුබෝවන්! බ්‍රවුනි ඔයා එනකම් බලාගෙන හිටියා",
     "methods": {
-      "label": "Login වෙන විදිය තෝරන්න",
+      "label": "එකතු වෙන විදිය තෝරන්න",
       "google": "Google එකෙන් ඉදිරියට",
       "facebook": "Facebook එකෙන් ඉදිරියට",
       "email": "Email එකෙන් ඉදිරියට",
@@ -453,9 +453,9 @@
       "title": "ඔයාගේ email එක මොකක්ද?",
       "label": "Email ලිපිනය",
       "placeholder": "you@example.com",
-      "send": "මට code එකක් එවන්න",
-      "sending": "යවමින්…",
-      "hint": "මේ code එක යවන්න විතරයි ඔයාගේ email එක පාවිච්චි කරන්නේ. ඒක කවුරුත්ට පෙන්වන්නේ නැහැ.",
+      "send": "ඉදිරියට",
+      "sending": "පරීක්ෂා කරනවා…",
+      "hint": "ඔයාට දැනටමත් ගිණුමක් තියෙනවද කියලා අපි බලනවා. ඔයාගේ email එක කවුරුත්ට පෙන්වන්නේ නැහැ.",
       "invalid": "නිවැරදි email ලිපිනයක් ඇතුළත් කරන්න."
     },
     "code": {
@@ -473,7 +473,7 @@
       "rate": "ගොඩක් වතාවක් try කළා. විනාඩි කීපයක් ඉඳලා ආයෙත් try කරන්න.",
       "network": "Server එකට සම්බන්ධ වෙන්න බැරි වුණා. Internet එක බලලා ආයෙත් try කරන්න.",
       "generic": "මොකක්දෝ වැරැද්දක් වුණා. ආයෙත් try කරන්න.",
-      "callback": "Login එක ඉවර වුණේ නැහැ. ආයෙත් try කරන්න."
+      "callback": "එකතු වීම ඉවර වුණේ නැහැ. ආයෙත් try කරන්න."
     },
     "welcome": {
       "title": "සාදරයෙන් පිළිගන්නවා, {name}!",
@@ -482,12 +482,40 @@
     },
     "back": "ආපසු",
     "gate": {
-      "title": "Report එක යවන්න login වෙන්න",
+      "title": "Report එක යවන්න එකතු වෙන්න",
       "body": "ඔයාගේ photo එකයි විස්තරයි මේ phone එකේ ආරක්ෂිතව තියෙනවා. එක පොඩි පියවරක් විතරයි, ඊට පස්සේ අපි යවනවා.",
       "restored": "ආයෙත් සාදරයෙන් පිළිගන්නවා! ඔයාගේ report එක සූදානම්. යවන්න ඔබන්න."
     },
     "sign": "Volunteer ඇතුල්වීම",
-    "shh": "ශ්ශ්… රහස් code එකක්"
+    "shh": "ශ්ශ්… රහස් code එකක්",
+    "password": {
+      "title": "ආයුබෝවන්, ආයෙත් සාදරයෙන්!",
+      "subtitle": "{email} සඳහා password එක ඇතුළත් කරන්න.",
+      "label": "Password එක",
+      "show": "Password පෙන්වන්න",
+      "hide": "Password සඟවන්න",
+      "submit": "ඉදිරියට",
+      "submitting": "පරීක්ෂා කරනවා…",
+      "wrong": "Password එක ගැලපෙන්නේ නැහැ. ආයෙත් try කරන්න, නැත්නම් email එකෙන් code එකක් ගන්න.",
+      "forgot": "Password එක අමතක වුණාද?",
+      "other": "වෙන email එකක් පාවිච්චි කරන්න"
+    },
+    "newPassword": {
+      "createTitle": "Password එකක් හදන්න",
+      "createBody": "ඔයාගේ email එක තහවුරු වුණා. ඊළඟ වතාවේ ඉක්මනට එකතු වෙන්න password එකක් තෝරන්න.",
+      "resetTitle": "අලුත් password එකක් තෝරන්න",
+      "resetBody": "ඔයාගේ email එක තහවුරු වුණා. අලුත් password එකක් තෝරන්න.",
+      "label": "Password එක",
+      "confirm": "Password එක නැවත ඇතුළත් කරන්න",
+      "ruleLength": "අවම වශයෙන් අකුරු 8ක්",
+      "ruleLetter": "අකුරක්",
+      "ruleNumber": "ඉලක්කමක්",
+      "ruleMatch": "Password දෙක සමානයි",
+      "mismatch": "Password දෙක සමාන නැහැ.",
+      "weak": "වඩා ශක්තිමත් password එකක් තෝරන්න.",
+      "submit": "සුරකින්න, එකතු වෙන්න",
+      "saving": "සුරකිනවා…"
+    }
   },
   "pet": {
     "back": "සිතියමට ආපසු",

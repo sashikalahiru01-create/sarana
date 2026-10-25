@@ -24,7 +24,7 @@ const extensionFor = (blob: Blob) => (blob.type === "image/webp" ? "webp" : blob
 
 /**
  * Uploads the photos, then saves the pet, linked to the logged-in person. The report form asks for login before
- * calling this (the database itself still accepts anonymous reports; see the note in supabase/schema.sql).
+ * calling this, and the database enforces the login too (see "logged-in people can report a pet" in supabase/schema.sql).
  * Returns the new pet id.
  */
 export async function submitReport(input: ReportInput, onProgress: (p: ReportProgress) => void): Promise<string> {

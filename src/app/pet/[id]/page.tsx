@@ -123,7 +123,7 @@ export default async function PetPage({ params }: Params) {
               status={pet.status}
               userId={user?.id ?? null}
               canSetStatus={mayChangeStatus}
-              loginHref={`/login?next=${encodeURIComponent(`/pet/${pet.id}`)}`}
+              loginHref={`/join?next=${encodeURIComponent(`/pet/${pet.id}`)}`}
               offers={offers}
               homes={homes}
             />

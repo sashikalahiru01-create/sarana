@@ -8,7 +8,7 @@ import type { AuthProblem, LoggedIn } from "@/lib/auth-client";
 import { DoorScene, type LoginMood } from "./DoorScene";
 import { LoginPanel, type PanelMood } from "./LoginPanel";
 
-/** The /login page: the door scene on top, the login card below. After logging in the door opens, then we move on. */
+/** The /join page: the door scene on top, the join card below. After joining the door opens, then we move on. */
 export function LoginExperience({ next, initialProblem }: { next: string; initialProblem: AuthProblem | null }) {
   const t = useT();
   const router = useRouter();

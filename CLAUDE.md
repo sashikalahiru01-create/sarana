@@ -30,7 +30,7 @@ Never add a paid service or anything that needs a credit card without asking fir
 3. `/report` Photo → location (GPS + draggable pin) → details (animal, condition chips, note). Login is asked only when the person presses Send (Google, Facebook later, or an emailed 6-digit code); the report is kept on the device meanwhile. Phone or email contact is optional
 4. `/pet/[id]` Photos, location, status timeline, "I'll help" and "Give a home" buttons, updates, share to WhatsApp / Facebook
 5. `/volunteer` Volunteer sign-up: skills (feeding, transport, foster, vet care) and area
-6. `/login` "Volunteer entrance" door scene. Google, Facebook (later) and email code. No phone/SMS login (it costs money)
+6. `/join` ("Join", old `/login` redirects here) "Volunteer entrance" door scene. Email first: an email that already has a password asks for it; a new email gets a 6-digit code, then chooses a password and confirms it. Google too, Facebook later. No phone/SMS login (it costs money)
 7. `/profile` My reports, animals I helped, settings
 8. `/about` About + contact
 

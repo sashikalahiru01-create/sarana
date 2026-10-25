@@ -1,14 +1,19 @@
 "use client";
 
-import { ArrowLeft, Loader2, Mail, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Circle, Eye, EyeOff, Loader2, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useT } from "@/i18n/client";
 import {
+  checkEmail,
+  checkPassword,
   CODE_LENGTH,
   isEmail,
   loadProviders,
+  PASSWORD_MAX,
   sendEmailCode,
+  setPassword as savePasswordFor,
+  signInWithPassword,
   signInWithProvider,
   verifyEmailCode,
   type AuthProblem,
@@ -30,7 +35,10 @@ type Props = {
 };
 
 const RESEND_SECONDS = 30;
-type Step = "method" | "email" | "code";
+type Step = "method" | "email" | "password" | "code" | "newPassword";
+/** "create": a new account or one without a password. "reset": someone who forgot theirs. */
+type Purpose = "create" | "reset";
+type Busy = null | "google" | "check" | "send" | "verify" | "signin" | "save";
 
 function GoogleMark() {
   return (
@@ -52,12 +60,75 @@ function FacebookMark() {
   );
 }
 
+const inputClass = "min-h-14 w-full rounded-button border-[1.5px] bg-surface px-4 text-[16px]";
+
+/** A password box with a show/hide eye. Keeps its own look so the three password fields match. */
+function PasswordField({
+  label,
+  value,
+  onChange,
+  autoComplete,
+  show,
+  onToggle,
+  showLabel,
+  hideLabel,
+  invalid = false,
+  autoFocus = false,
+  onFocus,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: "current-password" | "new-password";
+  show: boolean;
+  onToggle: () => void;
+  showLabel: string;
+  hideLabel: string;
+  invalid?: boolean;
+  autoFocus?: boolean;
+  onFocus?: () => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="font-semibold">{label}</span>
+      <span className="relative block">
+        <input
+          type={show ? "text" : "password"}
+          autoComplete={autoComplete}
+          autoCapitalize="off"
+          spellCheck={false}
+          value={value}
+          maxLength={PASSWORD_MAX}
+          aria-invalid={invalid}
+          autoFocus={autoFocus}
+          onFocus={onFocus}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${inputClass} pr-14 ${invalid ? "border-coral" : "border-line"}`}
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-label={show ? hideLabel : showLabel}
+          aria-pressed={show}
+          className="absolute right-1 top-1/2 grid size-12 -translate-y-1/2 place-items-center rounded-button text-muted transition duration-200 hover:text-foreground"
+        >
+          {show ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
+        </button>
+      </span>
+    </label>
+  );
+}
+
 const methodButton =
   "flex min-h-14 w-full items-center justify-center gap-2.5 rounded-button border-[1.5px] border-line bg-surface px-4 text-[15px] font-bold whitespace-nowrap max-[359px]:whitespace-normal max-[359px]:px-3 max-[359px]:text-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60";
 
 /**
- * Choose a way to log in, and do it. Used on the /login page and again inside the report form, so a
- * visitor who is about to send a report can log in without leaving it.
+ * Choose a way to join, and do it. Used on the /join page and again inside the report form, so a visitor who is
+ * about to send a report can join without leaving it.
+ *
+ * Email first: we ask the database whether the email already has a password. If it does, the person types it.
+ * If not (a new email, or an account that only ever used codes), we email a 6-digit code to prove the address and
+ * then ask them to choose a password and confirm it. "Forgot your password?" uses the same code step.
  */
 export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Props) {
   const t = useT();
@@ -66,7 +137,13 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
   const [providers, setProviders] = useState<Providers | null>(null);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [busy, setBusy] = useState<null | "google" | "send" | "verify">(null);
+  const [busy, setBusy] = useState<Busy>(null);
+  const [purpose, setPurpose] = useState<Purpose>("create");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [show, setShow] = useState(false);
+  const [passwordError, setPasswordError] = useState<null | "weak" | "mismatch">(null);
+  const [verified, setVerified] = useState<LoggedIn | null>(null);
   const [problem, setProblem] = useState<AuthProblem | null>(initialProblem);
   const [emailError, setEmailError] = useState(false);
   const [wrongTries, setWrongTries] = useState(0);
@@ -103,6 +180,10 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
         return t("login.errors.network");
       case "wrong":
         return wrongTries >= 3 ? t("login.code.expired") : t("login.code.wrong");
+      case "badPassword":
+        return t("login.password.wrong");
+      case "weak":
+        return t("login.newPassword.weak");
       case "notReady":
         return t("login.methods.notReady");
       default:
@@ -128,20 +209,68 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
     }
   };
 
-  const sendCode = async () => {
-    if (!isEmail(email)) return setEmailError(true);
-    setEmailError(false);
+  /** Emails the code and moves to the code step (also used by "send a new code" and "forgot your password"). */
+  const sendCode = async (why: Purpose = purpose) => {
     setProblem(null);
     setBusy("send");
     const result = await sendEmailCode(email);
     setBusy(null);
     if (!result.ok) return setProblem(result.problem);
+    setPurpose(why);
     setCode("");
     setCodeState("idle");
     setWrongTries(0);
     setSentAt(Date.now());
     setSecondsLeft(RESEND_SECONDS);
     go("code", "secret");
+  };
+
+  /** The email step: is this a new email, or does it already have a password? */
+  const continueWithEmail = async () => {
+    if (!isEmail(email)) return setEmailError(true);
+    setEmailError(false);
+    setProblem(null);
+    setBusy("check");
+    const result = await checkEmail(email);
+    setBusy(null);
+    if (!result.ok) return setProblem(result.problem);
+    if (result.value === "password") {
+      setPassword("");
+      setShow(false);
+      return go("password", "secret");
+    }
+    await sendCode("create");
+  };
+
+  const signIn = async () => {
+    if (busy || !password) return;
+    setProblem(null);
+    setBusy("signin");
+    const result = await signInWithPassword(email, password);
+    setBusy(null);
+    if (!result.ok) {
+      setPassword("");
+      onMood?.("wrong");
+      setTimeout(() => onMood?.("secret"), 700);
+      return setProblem(result.problem);
+    }
+    router.refresh(); // headers and other server parts now know who is logged in
+    onDone(result.value);
+  };
+
+  const savePassword = async () => {
+    if (busy || !verified) return;
+    const rules = checkPassword(password, confirm);
+    if (!rules.strong) return setPasswordError("weak");
+    if (!rules.match) return setPasswordError("mismatch");
+    setPasswordError(null);
+    setProblem(null);
+    setBusy("save");
+    const result = await savePasswordFor(password);
+    setBusy(null);
+    if (!result.ok) return setProblem(result.problem);
+    router.refresh();
+    onDone(verified);
   };
 
   const verify = async (value: string) => {
@@ -163,8 +292,13 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
       }
       return setProblem(result.problem);
     }
-    router.refresh(); // headers and other server parts now know who is logged in
-    onDone(result.value);
+    // The email is proven and they are logged in. Now they choose a password (and confirm it).
+    setVerified(result.value);
+    setPassword("");
+    setConfirm("");
+    setShow(false);
+    setPasswordError(null);
+    go("newPassword", "secret");
   };
 
   const onCode = (value: string) => {
@@ -185,7 +319,7 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
         className="flex flex-col gap-4"
         onSubmit={(e) => {
           e.preventDefault();
-          void sendCode();
+          void continueWithEmail();
         }}
         noValidate
       >
@@ -211,7 +345,7 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
               setProblem(null);
             }}
             autoFocus
-            className={`min-h-14 rounded-button border-[1.5px] bg-surface px-4 text-[16px] ${emailError ? "border-coral" : "border-line"}`}
+            className={`${inputClass} ${emailError ? "border-coral" : "border-line"}`}
           />
           {emailError && (
             <span role="alert" className="text-sm font-semibold text-coral-ink dark:text-brownie">
@@ -227,10 +361,153 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
             {t("login.back")}
           </button>
           <button type="submit" className="btn btn-primary flex-1" disabled={busy !== null}>
-            {busy === "send" ? <Loader2 size={20} className="animate-spin" aria-hidden="true" /> : <Send size={20} aria-hidden="true" />}
-            {busy === "send" ? t("login.email.sending") : t("login.email.send")}
+            {busy === "check" || busy === "send" ? <Loader2 size={20} className="animate-spin" aria-hidden="true" /> : <ArrowRight size={20} aria-hidden="true" />}
+            {busy === "check" || busy === "send" ? t("login.email.sending") : t("login.email.send")}
           </button>
         </div>
+      </form>
+    );
+  }
+
+  if (step === "password") {
+    return (
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void signIn();
+        }}
+        noValidate
+      >
+        <h2 ref={headingRef} tabIndex={-1} className="text-2xl outline-none">
+          {t("login.password.title")}
+        </h2>
+        <p className="text-muted [overflow-wrap:anywhere]">{t("login.password.subtitle", { email: email.trim() })}</p>
+        <input type="email" value={email.trim()} autoComplete="username" readOnly tabIndex={-1} aria-hidden="true" className="sr-only" />
+        <PasswordField
+          label={t("login.password.label")}
+          value={password}
+          onChange={(v) => {
+            setPassword(v);
+            setProblem(null);
+          }}
+          autoComplete="current-password"
+          show={show}
+          onToggle={() => {
+            setShow((v) => !v);
+            onMood?.(show ? "secret" : "watch");
+          }}
+          showLabel={t("login.password.show")}
+          hideLabel={t("login.password.hide")}
+          invalid={problem === "badPassword"}
+          onFocus={() => onMood?.(show ? "watch" : "secret")}
+          autoFocus
+        />
+        <div className="min-h-6" aria-live="polite">
+          {showProblem}
+        </div>
+        <button type="submit" className="btn btn-primary !min-h-14" disabled={busy !== null || !password}>
+          {busy === "signin" ? <Loader2 size={20} className="animate-spin" aria-hidden="true" /> : <ArrowRight size={20} aria-hidden="true" />}
+          {busy === "signin" ? t("login.password.submitting") : t("login.password.submit")}
+        </button>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <button type="button" className="btn btn-ghost !min-h-11 !px-4 text-sm" onClick={() => go("email", "watch")} disabled={busy !== null}>
+            <ArrowLeft size={16} aria-hidden="true" />
+            {t("login.password.other")}
+          </button>
+          <button
+            type="button"
+            className="flex min-h-11 items-center gap-2 rounded-button px-3 text-sm font-bold text-coral-ink transition duration-200 disabled:text-muted dark:text-brownie"
+            onClick={() => void sendCode("reset")}
+            disabled={busy !== null}
+          >
+            {busy === "send" && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
+            {t("login.password.forgot")}
+          </button>
+        </div>
+      </form>
+    );
+  }
+
+  if (step === "newPassword") {
+    const rules = checkPassword(password, confirm);
+    const list: { ok: boolean; text: string }[] = [
+      { ok: rules.length, text: t("login.newPassword.ruleLength") },
+      { ok: rules.letter, text: t("login.newPassword.ruleLetter") },
+      { ok: rules.number, text: t("login.newPassword.ruleNumber") },
+      { ok: rules.match, text: t("login.newPassword.ruleMatch") },
+    ];
+    const toggle = () => {
+      setShow((v) => !v);
+      onMood?.(show ? "secret" : "watch");
+    };
+    return (
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void savePassword();
+        }}
+        noValidate
+      >
+        <h2 ref={headingRef} tabIndex={-1} className="text-2xl outline-none">
+          {t(purpose === "reset" ? "login.newPassword.resetTitle" : "login.newPassword.createTitle")}
+        </h2>
+        <p className="text-muted">{t(purpose === "reset" ? "login.newPassword.resetBody" : "login.newPassword.createBody")}</p>
+        <input type="email" value={email.trim()} autoComplete="username" readOnly tabIndex={-1} aria-hidden="true" className="sr-only" />
+        <PasswordField
+          label={t("login.newPassword.label")}
+          value={password}
+          onChange={(v) => {
+            setPassword(v);
+            setPasswordError(null);
+            setProblem(null);
+          }}
+          autoComplete="new-password"
+          show={show}
+          onToggle={toggle}
+          showLabel={t("login.password.show")}
+          hideLabel={t("login.password.hide")}
+          invalid={passwordError === "weak"}
+          onFocus={() => onMood?.(show ? "watch" : "secret")}
+          autoFocus
+        />
+        <PasswordField
+          label={t("login.newPassword.confirm")}
+          value={confirm}
+          onChange={(v) => {
+            setConfirm(v);
+            setPasswordError(null);
+          }}
+          autoComplete="new-password"
+          show={show}
+          onToggle={toggle}
+          showLabel={t("login.password.show")}
+          hideLabel={t("login.password.hide")}
+          invalid={passwordError === "mismatch"}
+          onFocus={() => onMood?.(show ? "watch" : "secret")}
+        />
+        <ul className="grid grid-cols-1 gap-1.5 text-sm min-[420px]:grid-cols-2" aria-label={t("login.newPassword.label")}>
+          {list.map(({ ok, text }) => (
+            <li key={text} className={`flex items-center gap-2 font-semibold transition duration-200 ${ok ? "text-green dark:text-[#4fc3a5]" : "text-muted"}`}>
+              {ok ? <Check size={16} strokeWidth={3} aria-hidden="true" /> : <Circle size={16} aria-hidden="true" />}
+              {text}
+            </li>
+          ))}
+        </ul>
+        <div className="min-h-6" aria-live="polite">
+          {passwordError ? (
+            <p role="alert" className="text-sm font-semibold text-coral-ink dark:text-brownie">
+              {t(passwordError === "weak" ? "login.newPassword.weak" : "login.newPassword.mismatch")}
+            </p>
+          ) : (
+            showProblem
+          )}
+        </div>
+        <button type="submit" className="btn btn-primary !min-h-14" disabled={busy !== null}>
+          {busy === "save" ? <Loader2 size={20} className="animate-spin" aria-hidden="true" /> : <Check size={20} aria-hidden="true" />}
+          {busy === "save" ? t("login.newPassword.saving") : t("login.newPassword.submit")}
+        </button>
       </form>
     );
   }
@@ -267,7 +544,7 @@ export function LoginPanel({ next, onDone, onMood, initialProblem = null }: Prop
             type="button"
             className="flex min-h-11 items-center gap-2 rounded-button px-3 text-sm font-bold text-coral-ink transition duration-200 disabled:text-muted dark:text-brownie"
             disabled={secondsLeft > 0 || busy !== null}
-            onClick={() => void sendCode()}
+            onClick={() => void sendCode(purpose)}
           >
             {secondsLeft > 0 && (
               <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true" className="-rotate-90">

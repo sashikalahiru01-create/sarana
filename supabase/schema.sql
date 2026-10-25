@@ -3,7 +3,7 @@
 -- It is safe to run again: it only creates what is missing and replaces policies.
 --
 -- Tables:   profiles, pets, pet_contacts, reports, volunteers
--- Storage:  pet-photos bucket (public read, anyone can upload small images)
+-- Storage:  pet-photos bucket (public read, logged-in people can upload small images)
 -- Security: Row Level Security (RLS) is ON for every table. Admins are rows in
 --           profiles with role = 'admin'. After you sign up, make yourself admin with:
 --             update public.profiles set role = 'admin' where id = '<your user id>';
@@ -241,6 +241,39 @@ as $$
 $$;
 
 -- ---------------------------------------------------------------------------
+-- Join page: does this email already have an account, and a password?
+-- The browser cannot see auth.users, so this answers with one word and nothing else:
+-- 'none' (new email), 'no_password' (account exists, no password yet) or 'password'.
+-- ---------------------------------------------------------------------------
+
+create or replace function public.email_account_status(p_email text)
+returns text
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select case
+    when p_email is null or char_length(p_email) > 254 then 'none'
+    else coalesce(
+      (
+        select case
+          when u.encrypted_password is not null and u.encrypted_password <> '' then 'password'
+          else 'no_password'
+        end
+        from auth.users u
+        where lower(u.email) = lower(btrim(p_email)) and u.deleted_at is null
+        limit 1
+      ),
+      'none'
+    )
+  end;
+$$;
+
+revoke all on function public.email_account_status(text) from public;
+grant execute on function public.email_account_status(text) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 
@@ -267,16 +300,15 @@ create policy "read visible pets" on public.pets
   for select to anon, authenticated
   using (not is_hidden or public.is_admin());
 
--- NOTE: the website now asks people to log in before it sends a report, but this rule still lets anonymous
--- visitors insert (it was written when no login was needed). To make the database enforce login too, change
--- "to anon, authenticated" below to "to authenticated". That is a schema change: ask first, then run it in Supabase.
+-- Reporting needs a login (the website asks for it when you press Send, and the database enforces it too).
 drop policy if exists "anyone can report a pet" on public.pets;
-create policy "anyone can report a pet" on public.pets
-  for insert to anon, authenticated
+drop policy if exists "logged-in people can report a pet" on public.pets;
+create policy "logged-in people can report a pet" on public.pets
+  for insert to authenticated
   with check (
     status = 'reported'
     and not is_hidden
-    and (reporter_id is null or reporter_id = (select auth.uid()))
+    and reporter_id = (select auth.uid())
   );
 
 drop policy if exists "admins edit pets" on public.pets;
@@ -287,14 +319,16 @@ drop policy if exists "admins delete pets" on public.pets;
 create policy "admins delete pets" on public.pets
   for delete to authenticated using (public.is_admin());
 
--- pet_contacts: can be added only right after reporting; read by admin or the reporter
+-- pet_contacts: the reporter adds it right after reporting (10 minutes); read by admin or the reporter
 drop policy if exists "add contact to new pet" on public.pet_contacts;
 create policy "add contact to new pet" on public.pet_contacts
-  for insert to anon, authenticated
+  for insert to authenticated
   with check (
     exists (
       select 1 from public.pets p
-      where p.id = pet_id and p.created_at > now() - interval '10 minutes'
+      where p.id = pet_id
+        and p.reporter_id = (select auth.uid())
+        and p.created_at > now() - interval '10 minutes'
     )
   );
 
@@ -365,11 +399,12 @@ grant usage on schema public to anon, authenticated;
 grant select on public.profiles to anon, authenticated;
 grant update (display_name) on public.profiles to authenticated; -- role can never be self-edited
 
-grant select, insert on public.pets to anon, authenticated;
-grant update, delete on public.pets to authenticated;
+grant select on public.pets to anon, authenticated;
+grant insert, update, delete on public.pets to authenticated;
+revoke insert on public.pets from anon;
 
-grant insert on public.pet_contacts to anon, authenticated;
-grant select on public.pet_contacts to authenticated;
+grant insert, select on public.pet_contacts to authenticated;
+revoke insert on public.pet_contacts from anon;
 
 grant select on public.reports to anon, authenticated;
 grant insert, update, delete on public.reports to authenticated;
@@ -393,8 +428,9 @@ on conflict (id) do update
       allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "anyone can upload pet photos" on storage.objects;
-create policy "anyone can upload pet photos" on storage.objects
-  for insert to anon, authenticated
+drop policy if exists "logged-in people can upload pet photos" on storage.objects;
+create policy "logged-in people can upload pet photos" on storage.objects
+  for insert to authenticated
   with check (bucket_id = 'pet-photos');
 
 drop policy if exists "admins delete pet photos" on storage.objects;

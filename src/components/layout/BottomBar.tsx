@@ -35,7 +35,7 @@ export function BottomBar({ loggedIn = false }: { loggedIn?: boolean }) {
           return (
             <li key={href} className="flex justify-center">
               <Link
-                href={href === "/profile" && !loggedIn ? "/login?next=/profile" : href}
+                href={href === "/profile" && !loggedIn ? "/join?next=/profile" : href}
                 aria-current={active ? "page" : undefined}
                 className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition duration-200 ${
                   isReport ? "text-coral-ink dark:text-brownie" : active ? "text-foreground" : "text-muted"

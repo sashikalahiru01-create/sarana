@@ -26,7 +26,7 @@ export async function SiteHeader() {
           {user ? (
             <AccountMenu name={user.name} email={user.email} avatarUrl={user.avatarUrl} />
           ) : (
-            <Link href="/login" aria-label={t("nav.login")} className="header-cta btn btn-ghost hidden !min-h-11 !px-3 whitespace-nowrap md:inline-flex lg:!px-4">
+            <Link href="/join" aria-label={t("nav.login")} className="header-cta btn btn-ghost hidden !min-h-11 !px-3 whitespace-nowrap md:inline-flex lg:!px-4">
               <LogIn size={18} aria-hidden="true" />
               <span className="login-label hidden lg:inline">{t("nav.login")}</span>
             </Link>

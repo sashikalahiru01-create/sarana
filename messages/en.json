@@ -19,7 +19,7 @@
     "volunteer": "Volunteer",
     "profile": "Profile",
     "about": "About",
-    "login": "Log in",
+    "login": "Join",
     "main": "Main navigation",
     "mobile": "Mobile navigation",
     "story": "Brownie's story",
@@ -435,12 +435,12 @@
     "cta": "Become a volunteer"
   },
   "login": {
-    "title": "Step through the door",
+    "title": "Join Brownie's pack",
     "eyebrow": "Volunteer entrance",
-    "subtitle": "Log in to join Brownie's pack: report animals and help the ones near you.",
+    "subtitle": "Join to report animals and help the ones near you.",
     "greeting": "Hello! Brownie was waiting for you",
     "methods": {
-      "label": "Choose how to log in",
+      "label": "Choose how to join",
       "google": "Continue with Google",
       "facebook": "Continue with Facebook",
       "email": "Continue with email",
@@ -453,9 +453,9 @@
       "title": "What's your email?",
       "label": "Email address",
       "placeholder": "you@example.com",
-      "send": "Send me a code",
-      "sending": "Sending…",
-      "hint": "We only use your email to send this code. It is never shown to anyone.",
+      "send": "Continue",
+      "sending": "Checking…",
+      "hint": "We'll check if you already have an account. Your email is never shown to anyone.",
       "invalid": "Please enter a valid email address."
     },
     "code": {
@@ -473,7 +473,7 @@
       "rate": "Too many tries. Please wait a few minutes and try again.",
       "network": "We couldn't reach the server. Check your internet and try again.",
       "generic": "Something went wrong. Please try again.",
-      "callback": "Login didn't finish. Please try again."
+      "callback": "Joining didn't finish. Please try again."
     },
     "welcome": {
       "title": "Welcome, {name}!",
@@ -482,12 +482,40 @@
     },
     "back": "Back",
     "gate": {
-      "title": "Log in to send your report",
+      "title": "Join to send your report",
       "body": "Your photo and details are safe on this phone. One quick step and we'll send it.",
       "restored": "Welcome back! Your report is ready. Tap send."
     },
     "sign": "Volunteer entrance",
-    "shh": "Shh… secret code"
+    "shh": "Shh… secret code",
+    "password": {
+      "title": "Welcome back!",
+      "subtitle": "Enter your password for {email}.",
+      "label": "Password",
+      "show": "Show password",
+      "hide": "Hide password",
+      "submit": "Continue",
+      "submitting": "Checking…",
+      "wrong": "That password doesn't match. Try again, or get a code by email.",
+      "forgot": "Forgot your password?",
+      "other": "Use a different email"
+    },
+    "newPassword": {
+      "createTitle": "Create your password",
+      "createBody": "Your email is confirmed. Choose a password so joining is quick next time.",
+      "resetTitle": "Choose a new password",
+      "resetBody": "Your email is confirmed. Pick a new password.",
+      "label": "Password",
+      "confirm": "Confirm password",
+      "ruleLength": "At least 8 characters",
+      "ruleLetter": "A letter",
+      "ruleNumber": "A number",
+      "ruleMatch": "Both passwords match",
+      "mismatch": "The two passwords are not the same.",
+      "weak": "Please choose a stronger password.",
+      "submit": "Save and join",
+      "saving": "Saving…"
+    }
   },
   "pet": {
     "back": "Back to the map",
